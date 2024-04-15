@@ -8,3 +8,5 @@ const connectToDB = async ()=>{
         console.log("Error connecting to Mongo DB", error.messsage)
     }
 }
+
+export default connectToDB;
