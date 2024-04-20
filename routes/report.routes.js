@@ -1,5 +1,5 @@
 import express from "express";
-
+import { createReport, getAllReports, getReportById, deleteReportById } from "../controllers/report.controller.js";
 const router = express.Router();
 
 // Route to create a new report
