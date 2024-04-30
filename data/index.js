@@ -1,5 +1,5 @@
 import * as userDataFunctions from "./users.js";
-// import * as projectFunctions from "./projects.js";
+import * as commentsDataFunctions from "./comments.js";
 
 export const userData = userDataFunctions;
-// export const projectData = projectFunctions;
+export const commentsData = commentsDataFunctions;
