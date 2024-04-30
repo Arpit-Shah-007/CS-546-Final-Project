@@ -1,4 +1,4 @@
-import mongoose from "monggose"
+import mongoose from "mongoose"
 
 const userSchema = new mongoose.Schema({
     firstName:{
@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
+
 }, {timestamps: true});
 
 const User = mongoose.model("User", userSchema);

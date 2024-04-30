@@ -21,24 +21,25 @@
 <body>
     <div class="container">
         <nav class="navbar navbar-light justify-content-between my-3 ">
-            <a class="navbar-brand">PROJEX</a>
-            <form class="form-inline">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <a class="navbar-brand text-primary" id="cursor-pointer"
+                onclick="deletelocalId(); navigate('/dashboard')">PROJEX</a>
+            <form class="form-inline" id="search_form">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
                 <button class="btn btn-outline-primary " type="submit">Search</button>
 
             </form>
             <div>
                 <button type="button" class="btn btn-secondary mr-2" data-toggle="tooltip" data-placement="top"
-                    title="Add Project">
+                    title="Add Project" onclick="navigate('/create-project')">
                     +
                 </button>
 
-                <div class="btn-group">
+                <div class="btn-group " id="cursor-pointer">
                     <img class="avatar dropdown-toggle" src="/image/avatar2.png" alt="Avatar" id="dropdownMenu2"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Profile</a>
-                        <a class="dropdown-item" href="#">Log Out</a>
+                        <a class="dropdown-item" onclick="navigate('/profile')">Profile</a>
+                        <a class="dropdown-item" onclick="logOut()">Log Out</a>
                     </div>
                 </div>
             </div>
@@ -61,46 +62,14 @@
 
             </div>
 
-            <div class="col-12 col-sm-6 col-md-8 col-md-offset-2 border rounded dashboard-showcase-sec">
-                <div class="mb-2 mt-2 rounded d-flex justify-content-center">
-                    <div class="card profile mt-2" style="width: 40rem;">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <img class="avatar" src="/image/avatar2.png" alt="Avatar">
-                            </div>
-                            <div class="col">
-                                <h4 class="mb-0">ram raj</h4>
-                            </div>
-                        </div>
-                        <div class="card-body border rounded mt-2">
-                            <p class="card-text">Project / Post Description</p>
-                        </div>
-                        <video class="card-img-top border rounded mt-2" src="/image/hello.mp4" controls
-                            alt="Card image cap"></video>
+            <div class="col-12 col-sm-6 col-md-8 col-md-offset-2 border rounded dashboard-showcase-sec"
+                id="project_list">
 
-                    </div>
-                </div>
-                <div class="mb-2 mt-2 rounded d-flex justify-content-center ">
-                    <div class="card profile" style="width: 40rem;">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <img class="avatar" src="/image/avatar6.png" alt="Avatar">
-                            </div>
-                            <div class="col">
-                                <h4 class="mb-0">ram raj</h4>
-                            </div>
-                        </div>
-                        <div class="card-body border rounded mt-2">
-                            <p class="card-text">Project / Post Description</p>
-                        </div>
-                        <video class="card-img-top border rounded mt-2" src="/image/hello" alt="Card image cap"
-                            controls>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-
+    <div id="snackbar"></div>
+    <script src="/js/index.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -110,6 +79,75 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+    <script>
+        deletelocalId()
+        checkIsLogin()
+        const fetchProjects = async (search) => {
+            try {
+                checkIsLogin()
+                document.querySelector("#project_list").innerHTML = ""
+                let url = search && search != "" ? '/project' + `?search=${search}` : '/project'
+                let response = await fetch(_base_url + url, {
+                    method: "GET",
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("user-token")
+                    }
+                })
+                let data = await response.json()
+                if (data && data.status) {
+                    data?.data?.forEach(project => {
+                        // Create a temporary container element
+                        let container = document.createElement('div');
+
+                        // Set the innerHTML of the container to your HTML string
+                        container.innerHTML = `<div class="mb-2 mt-2 rounded d-flex justify-content-center" onclick="storelocalId('${project._id}')" id="cursor-pointer">
+        <div class="card profile mt-2" style="width: 40rem;">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img class="avatar" src="/image/avatar2.png" alt="Avatar">
+                </div>
+                <div class="col px-0">
+                    <h4 class="mb-0">${project.author.firstName} ${project.author.lastName}</h4>
+                </div>
+            </div>
+            <div class="card-body border rounded mt-2">
+                <p class="card-text">${project.title} - ${project.description}</p>
+            </div>
+            <video class="card-img-top border rounded mt-2" src="${project.videoLink}" controls
+                alt="Card image cap"></video>
+
+        </div>
+    </div>`;
+
+                        // Append the child nodes of the container to the parent node
+                        document.querySelector("#project_list").appendChild(container.firstChild);
+                    });
+
+                } else {
+                    showErrorToast(data.msg)
+                }
+            } catch (err) {
+                console.log("fetch project error")
+                console.log(err)
+                showErrorToast(err.message)
+            }
+        }
+
+        const searchProject = (e) => {
+            e.preventDefault()
+            let search = document.getElementById("search").value
+            if (search && search.trim() != "") {
+                fetchProjects(search)
+            } else {
+                fetchProjects()
+            }
+        }
+
+        document.querySelector('#search_form').addEventListener('submit', searchProject)
+
+        fetchProjects()
+    </script>
 </body>
 
 </html>

@@ -9,9 +9,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('./public'))
-app.use('/uploads', express.static('./uploads'))
 
 
 const viewPath = path.resolve('./views')
@@ -56,7 +56,7 @@ app.get('/report', (req, res) => {
     res.render('report')
 })
 
-app.listen('3000', (req, res) => {
+app.listen('5000', (req, res) => {
     connectToDB();
-    console.log("Your server is running on http://localhost:3000")
+    console.log("Your server is running on http://localhost:5000")
 })

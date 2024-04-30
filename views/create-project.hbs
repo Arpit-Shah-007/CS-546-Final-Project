@@ -21,7 +21,8 @@
 <body>
     <div class="container">
         <nav class="navbar navbar-light justify-content-between my-3 ">
-            <a class="navbar-brand">PROJEX</a>
+            <a class="navbar-brand text-primary" id="cursor-pointer"
+                onclick="deletelocalId(); navigate('/dashboard')">PROJEX</a>
             <form class="form-inline">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-primary " type="submit">Search</button>
@@ -33,12 +34,12 @@
                     +
                 </button>
 
-                <div class="btn-group">
+                <div class="btn-group" id="cursor-pointer">
                     <img class="avatar dropdown-toggle" src="/image/avatar2.png" alt="Avatar" id="dropdownMenu2"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Profile</a>
-                        <a class="dropdown-item" href="#">Log Out</a>
+                        <a class="dropdown-item" onclick="navigate('/profile')">Profile</a>
+                        <a class="dropdown-item" onclick="logOut()">Log Out</a>
                     </div>
                 </div>
             </div>
@@ -50,9 +51,10 @@
         <p>Post a Project video to your account .</p>
         <div class="container d-flex p-5 border justify-content-around">
             <div class="d-flex flex-column border rounded align-items-center justify-content-end">
-                <video class="video-upload-sec p-3" src="/image/hello.mp4" controls></video>
+                <video class="video-upload-sec p-3" src="" controls id="project_video"></video>
                 <div class="my-3">
-                    <input type="file" accept="video/*" hidden name="videoLink" id="upload-feature" />
+                    <input type="file" accept="video/*" hidden name="videoLink" id="upload-feature"
+                        onchange="setPreviewVideo(event)" />
                     <label class="btn btn-primary rounded" for="upload-feature">
                         Upload Video
                     </label>
@@ -61,8 +63,8 @@
             </div>
             <div class="w-75 p-3">
                 <div class="form-group">
-                    <label for="topic">Topic</label>
-                    <input type="text" placeholder="Topic" name="topic" class="form-control y-2" id="topic">
+                    <label for="title">Title</label>
+                    <input type="text" placeholder="Title" name="title" class="form-control y-2" id="title">
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
@@ -79,15 +81,16 @@
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-danger">Discard</button>
-                    <button type="button" class="btn btn-success">Post</button>
+                    <button type="button" class="btn btn-danger" id="discardButton">Discard</button>
+                    <button type="submit" class="btn btn-success" id="create_project">Post</button>
 
                 </div>
 
             </div>
         </div>
     </div>
-
+    <div id="snackbar"></div>
+    <script src="/js/index.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -97,6 +100,71 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+    <script>
+
+        const setPreviewVideo = (e) => {
+            const file = e.target.files[0]
+            console.log("file changed", file)
+            document.getElementById('project_video').setAttribute('src', URL.createObjectURL(file))
+        }
+
+        const createProject = async (e) => {
+            try {
+                checkIsLogin()
+                const title = document.getElementById("title").value
+                const description = document.getElementById("description").value
+                const subject = document.getElementById("subject").value
+                const branch = document.getElementById("branch").value
+                const file = document.getElementById("upload-feature").files[0]
+
+                let form = new FormData()
+                form.append('title', title)
+                form.append('description', description)
+                form.append('subject', subject)
+                form.append('branch', branch)
+                form.append('videoLink', file)
+
+                const response = await fetch(_base_url + '/project', {
+                    method: "POST",
+                    body: form,
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('user-token')
+                    }
+                })
+                let data = await response.json()
+                if (data && data.status) {
+                    //console.log(data)
+                    //navigate("/dashboard")
+                    showAlert(data.msg, 'success')
+                    setTimeout(() => {
+
+                        window.location.href = '/dashboard'
+                    }, 2000)
+                } else {
+                    showAlert(data.msg, 'error')
+                }
+
+            } catch (err) {
+                //console.log("create p", err)
+                showAlert(error.message, 'error')
+                return;
+            }
+        }
+        document.querySelector('#create_project').addEventListener('click', createProject)
+
+        const discardProject = () => {
+            document.getElementById("title").value = "";
+            document.getElementById("description").value = "";
+            document.getElementById("subject").value = "";
+            document.getElementById("branch").value = "";
+            document.getElementById("upload-feature").value = "";
+            document.getElementById("project_video").src = ""; // Reset video source
+        };
+
+        document.getElementById("discardButton").addEventListener("click", discardProject);
+
+    </script>
 </body>
 
 </html>
