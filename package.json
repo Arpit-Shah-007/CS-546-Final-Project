@@ -6,7 +6,7 @@
   "main": "app.js",
   "scripts": {
     "seed": "node tasks/seed.js",
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "author": "Group 30: Arpit Shah | Niteesh Kulhari | Harsh Vaghasia | Maitry Talaviya",
   "license": "ISC",
