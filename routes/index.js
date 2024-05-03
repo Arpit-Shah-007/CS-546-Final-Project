@@ -1,15 +1,20 @@
-import express from 'express';
-import authRouter from "./auth.routes.js";
-import projectRouter from "./project.routes.js";
-import reportRouter from "./report.routes.js"
+import authRoutes from "./authRoutes.js";
+import userRoutes from "./userRoutes.js";
+import projectRoutes from "./projectRoutes.js";
+import commentRoutes from "./commentRoutes.js";
 
-const router = express.Router();
+const constructorMethod = (app) => {
+  app.use("/home", (req, res) => {
+    res.render("dashboard", { title: "Projex" });
+  });
+  app.use("/auth", authRoutes);
+  app.use("/user", userRoutes);
+  app.use("/project", projectRoutes);
+  app.use("/comment", commentRoutes);
 
+  app.use("*", (req, res) => {
+    res.render("error", { status: 404, message: "Page Not Found" });
+  });
+};
 
-router.use("/auth", authRouter);
-router.use("/project", projectRouter);
-router.use("/report", reportRouter)
-
-
-
-export default router;
+export default constructorMethod;

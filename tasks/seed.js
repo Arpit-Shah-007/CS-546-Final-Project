@@ -7,15 +7,16 @@ import Project from "../models/projects.models.js";
 dotenv.config();
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_DB_URL)
-.then(() => {
-  console.log("Connected to MongoDB");
-  // Call the function to seed data after connecting to the database
-  seedUsers();
-})
-.catch((error) => {
-  console.error("Error connecting to MongoDB:", error);
-});
+mongoose
+  .connect(process.env.MONGO_DB_URL)
+  .then(() => {
+    console.log("Connected to MongoDB");
+    // Call the function to seed data after connecting to the database
+    seedUsers();
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+  });
 
 // Seed data
 const seedUsers = async () => {
