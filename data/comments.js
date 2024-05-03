@@ -1,12 +1,12 @@
-import Comment from "../models/comments.models";
+import Comment from "../models/comments.models.js";
 import { Types } from "mongoose";
 
-export const createComment = async (content, userId, postId) => {
+export const createComment = async (content, userId, projectId) => {
   content = content.trim();
   userId = userId.trim();
-  postId = postId.trim();
+  projectId = projectId.trim();
 
-  if (!content || !userId || !postId) {
+  if (!content || !userId || !projectId) {
     throw "All fields are required";
   }
 
@@ -15,20 +15,20 @@ export const createComment = async (content, userId, postId) => {
     content.length === 0 ||
     typeof userId !== "string" ||
     userId.length === 0 ||
-    typeof postId !== "string" ||
-    postId.length === 0
+    typeof projectId !== "string" ||
+    projectId.length === 0
   ) {
     throw "Please enter a valid string";
   }
 
-  if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(postId)) {
+  if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(projectId)) {
     throw "Please enter a valid string";
   }
 
   const newComment = new Comment({
     content,
     userId,
-    postId,
+    projectId,
   });
 
   await newComment.save();
@@ -57,22 +57,22 @@ export const getCommentById = async (id) => {
   return comment;
 };
 
-export const getCommentsByPostId = async (postId) => {
-  postId = postId.trim();
+export const getCommentsByPostId = async (projectId) => {
+  projectId = projectId.trim();
 
-  if (!postId) {
-    throw "Please provide a valid post id";
+  if (!projectId) {
+    throw "Please provide a valid project id";
   }
 
-  if (typeof postId !== "string" || postId.length === 0) {
+  if (typeof projectId !== "string" || projectId.length === 0) {
     throw "Please enter a valid string";
   }
 
-  if (!Types.ObjectId.isValid(postId)) {
+  if (!Types.ObjectId.isValid(projectId)) {
     throw "Please enter a valid string";
   }
 
-  const comments = await Comment.find({ postId });
+  const comments = await Comment.find({ projectId });
   return comments;
 };
 
@@ -150,23 +150,23 @@ export const deleteComment = async (id) => {
   return comment;
 };
 
-export const deleteCommentsByPostId = async (postId) => {
-  postId = postId.trim();
+export const deleteCommentsByPostId = async (projectId) => {
+  projectId = projectId.trim();
 
-  if (!postId) {
-    throw "Please provide a valid post id";
+  if (!projectId) {
+    throw "Please provide a valid project id";
   }
 
-  if (typeof postId !== "string" || postId.length === 0) {
+  if (typeof projectId !== "string" || projectId.length === 0) {
     throw "Please enter a valid string";
   }
 
-  if (!Types.ObjectId.isValid(postId)) {
+  if (!Types.ObjectId.isValid(projectId)) {
     throw "Please enter a valid string";
   }
 
-  const comments = await Comment.find({ postId });
-  await Comment.deleteMany({ postId });
+  const comments = await Comment.find({ projectId });
+  await Comment.deleteMany({ projectId });
   return comments;
 };
 

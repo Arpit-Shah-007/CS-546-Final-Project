@@ -113,10 +113,10 @@ export const loginUser = async (email, password) => {
   }
 
   const token = jwt.sign(
-    { email: user.email, _id: user._id },
+    { id: user._id, email: user.email, role: user.role },
     process.env.JWT_SECRET,
     {
-      expiresIn: "1d",
+      expiresIn: "7d",
     }
   );
   return { token };
@@ -151,7 +151,7 @@ export const getUserById = async (id) => {
 
   if (
     typeof id !== "string" ||
-    id.length != 24 ||
+    id.length === 0 ||
     !Types.ObjectId.isValid(id)
   ) {
     throw "Please enter a valid string";
@@ -162,6 +162,11 @@ export const getUserById = async (id) => {
     throw "User not found";
   }
   return user;
+};
+
+export const getAllUsers = async () => {
+  const users = await User.find();
+  return users;
 };
 
 export const updateUser = async (email, firstName, lastName, profilePic) => {
@@ -237,9 +242,4 @@ export const deleteUser = async (email) => {
   }
   await user.remove();
   return { deleteCompleted: true };
-};
-
-export const getAllUsers = async () => {
-  const users = await User.find();
-  return users;
 };

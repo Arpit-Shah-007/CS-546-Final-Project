@@ -43,36 +43,35 @@ app.use((req, res, next) => {
   const token = req.cookies.token?.token;
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      // console.log(decoded);
       if (err) {
-        res.redirect("/login");
+        res.redirect("/auth/login");
       } else {
         req.user = decoded;
         next();
       }
     });
   } else {
-    const nonAuthenticatedRoutes = ["/login", "/register"];
+    const nonAuthenticatedRoutes = ["/auth/login", "/auth/register"];
     if (!nonAuthenticatedRoutes.includes(req.path)) {
-      res.redirect("/login");
+      res.redirect("/auth/login");
     } else {
       next();
     }
   }
 });
 
-app.use("/login", (req, res, next) => {
+app.use("/auth/login", (req, res, next) => {
   if (req.method === "GET") {
     if (req.user) {
-      res.redirect("/projects");
+      res.redirect("/home");
     } else next();
   } else next();
 });
 
-app.use("/register", (req, res, next) => {
+app.use("/auth/register", (req, res, next) => {
   if (req.method === "GET") {
     if (req.user) {
-      res.redirect("/projects");
+      res.redirect("/home");
     } else next();
   } else next();
 });

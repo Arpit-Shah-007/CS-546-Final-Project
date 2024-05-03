@@ -1,6 +1,5 @@
 import express from "express";
 import { register, login, logout } from "../controllers/auth.controller.js";
-
 const router = express.Router();
 
 router
@@ -18,9 +17,5 @@ router
   .post(login);
 
 router.route("/logout").get(logout);
-
-router.route("/").get((req, res) => {
-  res.redirect("/login");
-});
 
 export default router;

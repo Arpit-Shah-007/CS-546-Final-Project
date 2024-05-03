@@ -102,7 +102,7 @@ export const register = async (req, res) => {
     res.status(400).render("register", {
       title: "Register",
       hasErrors: true,
-      error: error,
+      error: error.message || error,
     });
   }
 };
@@ -138,9 +138,8 @@ export const login = async (req, res) => {
     if (!token) {
       throw "Invalid username or password";
     }
-    // console.log(token);
     res.cookie("token", token);
-    res.redirect("/projects");
+    res.redirect("/home");
   } catch (error) {
     res.status(400).render("login", {
       title: "Login",
@@ -154,8 +153,7 @@ export const logout = async (req, res) => {
   if (req.cookies.token) {
     res.clearCookie("token");
     res.render("logout", { title: "Logout" });
-    // res.redirect("/login");
   } else {
-    res.redirect("/login");
+    res.redirect("/auth/login");
   }
 };

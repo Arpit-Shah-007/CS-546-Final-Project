@@ -1,13 +1,16 @@
 import authRoutes from "./authRoutes.js";
-import projectRoutes from "./projectRoutes.js";
 import userRoutes from "./userRoutes.js";
-// import reportRoutes from "./reportRoutes.js";
+import projectRoutes from "./projectRoutes.js";
+import commentRoutes from "./commentRoutes.js";
 
 const constructorMethod = (app) => {
-  app.use("/", authRoutes);
-  app.use("/projects", projectRoutes);
+  app.use("/home", (req, res) => {
+    res.render("dashboard", { title: "Projex" });
+  });
+  app.use("/auth", authRoutes);
   app.use("/user", userRoutes);
-  //   app.use("/report", reportRoutes);
+  app.use("/project", projectRoutes);
+  app.use("/comment", commentRoutes);
 
   app.use("*", (req, res) => {
     res.render("error", { status: 404, message: "Page Not Found" });

@@ -1,9 +1,12 @@
-import { commentsData } from "../data";
+import { commentsData } from "../data/index.js";
+import { Types } from "mongoose";
 
 export const createComment = async (req, res) => {
   try {
-    const { content, userId, postId } = req.body;
-    if (!content || !userId || !postId) {
+    const content = req.body.content;
+    const userId = req.user.id;
+    const projectId = req.params.projectId;
+    if (!content || !userId || !projectId) {
       throw "All fields are required";
     }
     if (
@@ -11,37 +14,22 @@ export const createComment = async (req, res) => {
       content.length === 0 ||
       typeof userId !== "string" ||
       userId.length === 0 ||
-      typeof postId !== "string" ||
+      typeof projectId !== "string" ||
       postId.length === 0
     ) {
       throw "Please enter a valid string";
     }
-    if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(postId)) {
+    if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(projectId)) {
       throw "Please enter a valid string";
     }
-    const comment = await commentsData.createComment(content, userId, postId);
+    const comment = await commentsData.createComment(
+      content,
+      userId,
+      projectId
+    );
     res.json(comment);
   } catch (e) {
     res.status(400).json({ error: e });
-  }
-};
-
-export const getCommentsByPostId = async (req, res) => {
-  try {
-    const postId = req.params.id;
-    if (!postId) {
-      throw "Please provide a valid id";
-    }
-    if (typeof postId !== "string" || postId.length === 0) {
-      throw "Please enter a valid string";
-    }
-    if (!Types.ObjectId.isValid(postId)) {
-      throw "Please enter a valid string";
-    }
-    const comments = await commentsData.getCommentsByPostId(req.params.id);
-    res.json(comments);
-  } catch (e) {
-    res.status(404).json({ error: e });
   }
 };
 
@@ -61,7 +49,7 @@ export const updateComment = async (req, res) => {
     if (!Types.ObjectId.isValid(id)) {
       throw "Please enter a valid string";
     }
-    const comment = await commentsData.updateComment(req.params.id, content);
+    const comment = await commentsData.updateComment(id, content);
     res.json(comment);
   } catch (e) {
     res.status(400).json({ error: e });
