@@ -1,0 +1,78 @@
+<section class="container-auth forms">
+    <div class="form login">
+        <div class="form-content">
+            <header>Login</header>
+            <form class="auth-form" id="login_form" method="post">
+                <div class="field input-field">
+                    <input type="email" placeholder="Email" class="input" id="email">
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="field input-field">
+                    <input type="password" placeholder="Password" class="password" id="password">
+                    <i class='bx bx-hide eye-icon'></i>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+
+                <div class="form-link">
+                    <a href="/forget-password" class="forgot-pass">Forgot password?</a>
+                </div>
+
+                <div class="field button-field">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+            <div class="text-center mt-10">
+                <a href="/register" class="text-center">Don't have an account ? </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    const loginHandle = (e) => {
+        e.preventDefault();
+
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+
+        let requiredFieldError = false;
+        if (!email) {
+            document.getElementById("emailError").textContent = "Email is required";
+            requiredFieldError = true;
+        } else if (!isValidEmail(email)) {
+            document.getElementById("emailError").textContent = "Please enter a valid email address";
+            requiredFieldError = true;
+        } else if (isValidStevensEmail(email)) {
+            requiredFieldError = true;
+            document.getElementById("emailError").textContent = "Only students of Stevens Institute can use this platform";
+        } else {
+            document.getElementById("emailError").textContent = "";
+        }
+
+        if (!password) {
+            requiredFieldError = true;
+            document.getElementById("passwordError").textContent = "Password is required";
+        } else {
+            document.getElementById("passwordError").textContent = "";
+        }
+
+        if (email && !isValidEmail(email) || !password) {
+            return;
+        }
+
+
+        window.location.href = '/dashboard';
+    }
+
+    document.getElementById("email").addEventListener("input", function () {
+        document.getElementById("emailError").textContent = "";
+    });
+
+    document.getElementById("password").addEventListener("input", function () {
+        document.getElementById("passwordError").textContent = "";
+    });
+
+    document.querySelector("#login_form").addEventListener("submit", loginHandle);
+</script>

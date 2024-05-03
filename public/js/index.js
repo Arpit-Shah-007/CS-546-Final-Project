@@ -1,75 +1,71 @@
-const _base_url = 'http://localhost:5000/api/v1'
 
-const navigate = (link) => {
-    window.location.href = link
-}
-
-const storelocalId = (id) => {
-    localStorage.setItem("project-id", id)
-    navigate('/show-project')
-}
-const deletelocalId = (id) => {
-    localStorage.removeItem("project-id")
-}
-
-const logOut = () => {
-    localStorage.clear()
-    window.location.href = '/login'
-    return
-}
-
-const hideErrorToast = () => {
-    const errorToast = document.getElementById('errorToast');
-    errorToast.style.display = 'none';
+const isValidEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
 
-const checkIsLogin = () => {
-    let token = localStorage.getItem('user-token')
-    if (!token) {
-        logOut()
-    }
-    return
+
+const isValidStevensEmail = (email) => {
+    return !/^[a-zA-Z][a-zA-Z0-9]*@stevens\.edu$/.test(email.trim().toLowerCase());
+};
+
+
+
+const isValidPassword = (password) => {
+    return !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])\S{8,}$/.test(password.trim())
 }
 
+const clearErrorMessages = () => {
+    const errorElements = document.querySelectorAll('.error-message');
+    errorElements.forEach(element => {
+        element.textContent = '';
+    });
+};
 
-function showAlert(message, type) {
-    // Get the snackbar DIV
-    var x = document.getElementById("snackbar");
 
-    // Add the "show" class to DIV
-    x.className = "show";
-    x.innerHTML = message;
-    x.style.backgroundColor = type == 'success' ? '#65ff0c' : '#fd4512'
 
-    // After 3 seconds, remove the show class from DIV
-    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+const discardProject = () => {
+    document.getElementById("title").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("subject").value = "";
+    document.getElementById("branch").value = "";
+    document.getElementById("upload-feature").value = "";
+    document.getElementById("project_video").src = "";
+    clearErrorMessages();
+};
+
+
+const setPreviewVideo = (e) => {
+    const file = e.target.files[0]
+    console.log("file changed", file)
+    document.getElementById('project_video').setAttribute('src', URL.createObjectURL(file))
 }
 
+const validateProjectFields = () => {
+    let isValid = true;
+    const fields = [
+        { id: 'title', errorId: 'titleError', message: 'Title is required' },
+        { id: 'description', errorId: 'descriptionError', message: 'Description is required' },
+        { id: 'branch', errorId: 'branchError', message: 'Branch is required' },
+        { id: 'subject', errorId: 'subjectError', message: 'Subject is required' },
+        { id: 'upload-feature', errorId: 'videoError', message: 'Project video is required' }
+    ];
 
-const forms = document.querySelector(".forms"),
-    pwShowHide = document.querySelectorAll(".eye-icon"),
-    links = document.querySelectorAll(".link");
+    fields.forEach(field => {
+        let value
+        if (field.id != 'upload-feature') {
+            value = document.getElementById(field.id).value.trim();
+        } else {
+            value = document.getElementById(field.id)
+        }
 
-pwShowHide.forEach(eyeIcon => {
-    eyeIcon.addEventListener("click", () => {
-        let pwFields = eyeIcon.parentElement.parentElement.querySelectorAll(".password");
+        const errorElement = document.getElementById(field.errorId);
+        if (!value || (field.id == 'upload-feature' && typeof value != 'object')) {
+            errorElement.textContent = field.message;
+            isValid = false;
+        } else {
+            errorElement.textContent = '';
+        }
+    });
 
-        pwFields.forEach(password => {
-            if (password.type === "password") {
-                password.type = "text";
-                eyeIcon.classList.replace("bx-hide", "bx-show");
-                return;
-            }
-            password.type = "password";
-            eyeIcon.classList.replace("bx-show", "bx-hide");
-        })
-
-    })
-})
-
-links.forEach(link => {
-    link.addEventListener("click", e => {
-        e.preventDefault(); //preventing form submit
-        forms.classList.toggle("show-signup");
-    })
-})
+    return isValid;
+};

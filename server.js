@@ -4,6 +4,7 @@ import cors from 'cors';
 import mainRouter from "./routes/index.js";
 import path from 'path';
 import hbs from 'hbs'
+import exphbs from "express-handlebars";
 const app = express();
 
 
@@ -14,28 +15,28 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('./public'))
 
 
-const viewPath = path.resolve('./views')
+app.engine('handlebars', exphbs.engine({ defaultLayout: 'main', layoutsDir: './views/layouts' }));
+app.set('view engine', 'handlebars');
 
-app.set('view engine', 'hbs')
-app.set('views', viewPath)
+hbs.registerPartials('./views/partials')
 
 app.use("/api/v1/", mainRouter);
 
 
 app.get('/login', (req, res) => {
-    res.render('login')
+    res.render('Authentication/login')
 })
 
 app.get('/forget-password', (req, res) => {
-    res.render('forget-password')
+    res.render('Authentication/forget-password')
 })
 
 app.get('/reset-password/:token?', (req, res) => {
-    res.render('reset-password')
+    res.render('Authentication/reset-password')
 })
 
 app.get('/register', (req, res) => {
-    res.render('register')
+    res.render('Authentication/register')
 })
 
 app.get('/dashboard', (req, res) => {
@@ -56,7 +57,7 @@ app.get('/report', (req, res) => {
     res.render('report')
 })
 
-app.listen('5000', (req, res) => {
+app.listen('4000', (req, res) => {
     connectToDB();
-    console.log("Your server is running on http://localhost:5000")
+    console.log("Your server is running on http://localhost:4000")
 })
