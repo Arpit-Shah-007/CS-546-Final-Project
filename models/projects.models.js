@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const projectSchema = new  mongoose.Schema({
+const projectSchema = new mongoose.Schema({
     title:{
         type: String,
         required: true
@@ -26,20 +26,18 @@ const projectSchema = new  mongoose.Schema({
         type: String,
         required: true
     },
-    likesCount: {
-        type: Number,
-        default: 0
-    },
-    dislikeCount:{
-        type: Number,
-        default: 0
-    },
-    comments: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Comment'
-        }
-    ],
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    dislikes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }],
     resources:[{
         type: String
     }],
@@ -47,8 +45,7 @@ const projectSchema = new  mongoose.Schema({
         type: Date,
         default: Date.now
     }
-})
-
+});
 
 const Project = mongoose.model('Project', projectSchema);
 
