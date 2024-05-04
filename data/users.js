@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 import { Types } from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 const saltRounds = 10;
 

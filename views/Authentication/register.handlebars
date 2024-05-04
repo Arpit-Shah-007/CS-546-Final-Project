@@ -1,0 +1,44 @@
+<section class="container-auth forms">
+    <div class="form login">
+        <div class="form-content">
+            <header>Register</header>
+            <form class="auth-form" id="register_form" method="post">
+                <div class="field input-field">
+                    <input type="text" placeholder="First Name" class="input" id="first_name" name="first_name">
+                </div>
+
+                <div class="field input-field">
+                    <input type="text" placeholder="Last Name" class="input" id="last_name" name="last_name">
+                </div>
+
+                <div class="field input-field">
+                    <input type="email" placeholder="Email" class="input" id="email" name="email">
+                </div>
+
+                <div class="field input-field">
+                    <input type="password" placeholder="Password" class="password" id="password" name="password">
+                </div>
+
+                <div class="field input-field">
+                    <input type="password" placeholder="Confirm Password" class="password" id="confirm_password"
+                        name="confirm_password">
+                </div>
+
+                <div class="field input-field border">
+                    <select id="role" class="role-class" name="role">
+                        <option value="">Role</option>
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                </div>
+
+                <div class="field button-field">
+                    <button type="button">Register</button>
+                </div>
+            </form>
+            <div class="text-center mt-10">
+                <a href="/login">Already have an account?</a>
+            </div>
+        </div>
+    </div>
+</section>
