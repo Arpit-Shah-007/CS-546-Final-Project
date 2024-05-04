@@ -1,0 +1,50 @@
+<div class="container">
+    {{> navbar}}
+</div>
+<div class="container">
+    <div class="container d-flex p-5 border justify-content-around">
+        <div class="d-flex flex-column border rounded align-items-center justify-content-center">
+            <video class="video-upload-sec p-3" id="project_video" controls></video>
+        </div>
+        <div class="w-75 p-3">
+            <div class="row align-items-top">
+                <div class="col-auto">
+                    <img class="avatar" src="/image/avatar2.png" alt="Avatar">
+                </div>
+                <div class="col px-0">
+                    <h4 class="mb-0" id="author_name"></h4>
+                    <p id="project_description">Description</p>
+                </div>
+
+            </div>
+            <div>
+
+
+
+                <div class="d-flex justify-content-around">
+                    <button type="button" class="btn btn-success" id="project_like">Like</button>
+                    <button type="button" class="btn btn-warning" id="project_dislike">DisLike</button>
+                    <button type="button" class="btn btn-danger" onclick="navigate('/report')">Report</button>
+
+                </div>
+                <div class="d-flex flex-column justify-content-between border rounded  project-comment-sec mt-2">
+                    <h5 class="p-3">Comments</h5>
+                    <div class="comment-sec px-3" id="comment_list">
+
+                    </div>
+
+                    <div class="d-flex justify-content-center m-3">
+
+                        <form class="form-inline" method="post" id="add_comment">
+                            <input class="form-control mr-sm-2" type="text" placeholder="Add Comment"
+                                aria-label="comment" id="comment">
+                            <button class="btn btn-outline-primary " type="submit">Comment</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
