@@ -1,0 +1,180 @@
+<div class="container">
+    {{> navbar}}
+</div>
+<div class="container">
+    <div class="container d-flex p-5 border justify-content-around">
+        <div class="d-flex flex-column border rounded align-items-center justify-content-center">
+            <video class="video-upload-sec p-3" id="project_video" controls></video>
+        </div>
+        <div class="w-75 p-3">
+            <div class="row align-items-top">
+                <div class="col-auto">
+                    <img class="avatar" src="/image/avatar2.png" alt="Avatar">
+                </div>
+                <div class="col px-0">
+                    <h4 class="mb-0" id="author_name"></h4>
+                    <p id="project_description">Description</p>
+                </div>
+
+            </div>
+            <div>
+
+
+
+                <div class="d-flex justify-content-around">
+                    <button type="button" class="btn btn-success" id="project_like">Like</button>
+                    <button type="button" class="btn btn-warning" id="project_dislike">DisLike</button>
+                    <button type="button" class="btn btn-danger" onclick="navigate('/report')">Report</button>
+
+                </div>
+                <div class="d-flex flex-column justify-content-between border rounded  project-comment-sec mt-2">
+                    <h5 class="p-3">Comments</h5>
+                    <div class="comment-sec px-3" id="comment_list">
+
+                    </div>
+
+                    <div class="d-flex justify-content-center m-3">
+
+                        <form class="form-inline" method="post" id="add_comment">
+                            <input class="form-control mr-sm-2" type="text" placeholder="Add Comment"
+                                aria-label="comment" id="comment">
+                            <button class="btn btn-outline-primary " type="submit">Comment</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    const fetchProjectData = async () => {
+        try {
+            checkIsLogin()
+            let response = await fetch(_base_url + '/project/' + localStorage.getItem('project-id'), {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("user-token")
+                }
+            })
+            let data = await response.json()
+            if (data.status) {
+                document.getElementById("project_description").innerHTML = data.data.title + ' - ' + data.data.description;
+                document.getElementById("author_name").innerHTML = data.data.author.firstName + ' ' + data.data.author.lastName;
+                document.getElementById("project_video").setAttribute('src', data.data.videoLink);
+
+                document.getElementById("project_like").innerHTML = (data?.data?.likedStatus == 'like' ? 'Liked' : 'Like') + ' ' + data?.data?.likesCount;
+                document.getElementById("project_dislike").innerHTML = (data?.data?.likedStatus == 'dislike' ? 'Disliked' : 'Dislike') + ' ' + data?.data?.dislikeCount
+                getProjectComment()
+            } else {
+                alert(data.msg)
+                return;
+            }
+        } catch (err) {
+            console.log(err)
+            alert(err.message)
+            return;
+        }
+    }
+    const likeDislikeHandle = async (type) => {
+        let form = new FormData()
+        form.append('type', type);
+        form.append('projectId', localStorage.getItem('project-id'))
+
+        try {
+            checkIsLogin()
+            let response = await fetch(_base_url + '/project/like-dislike', {
+                method: "POST",
+                body: form,
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("user-token")
+                }
+            })
+            let data = await response.json()
+
+            if (data && data.status) {
+                fetchProjectData()
+                showAlert(data.msg, 'success')
+            } else {
+                showAlert(data.msg, 'error')
+            }
+        } catch (err) {
+            showAlert(error.message, 'error')
+            return;
+        }
+    }
+    document.querySelector('#project_like').addEventListener('click', () => likeDislikeHandle('like'))
+    document.querySelector('#project_dislike').addEventListener('click', () => likeDislikeHandle('dislike'))
+
+    const getProjectComment = async () => {
+        try {
+            checkIsLogin()
+            let response = await fetch(_base_url + '/project/comments' + `?projectId=${localStorage.getItem('project-id')}`, {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("user-token")
+                }
+            })
+            let data = await response.json()
+
+            if (data && data.status) {
+                document.querySelector('#comment_list').innerHTML = "";
+                data.comments.forEach(comm => {
+                    let createCommentNode = document.createElement('div')
+                    createCommentNode.innerHTML = `<div class="mb-1">
+                                <p class="mb-0 font-weight-bold">${comm.userId.firstName} ${comm.userId.lastName}</p>
+                                <p class="mb-0"> ${comm.content} <span class="text-muted">${new Date(comm.date).toLocaleTimeString()}</span></p>
+                            </div>`
+
+                    document.querySelector('#comment_list').appendChild(createCommentNode.firstChild)
+                })
+
+            } else {
+                alert(data.msg)
+            }
+        } catch (err) {
+            console.log("error", err);
+            alert(err.message)
+            return;
+        }
+    }
+
+    const addProjectComment = async (e) => {
+        e.preventDefault()
+        try {
+            checkIsLogin()
+            let comment = document.getElementById("comment").value
+            if (comment.trim() == "") {
+                return
+            }
+            let form = new FormData()
+            form.append("content", comment)
+            form.append('projectId', localStorage.getItem('project-id'))
+            let response = await fetch(_base_url + '/project/comments', {
+                method: "POST",
+                body: form,
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("user-token")
+                }
+            })
+            let data = await response.json()
+
+            if (data && data.status) {
+                getProjectComment()
+                document.getElementById("comment").value = ''
+                showAlert(data.msg, 'success')
+            } else {
+                showAlert(data.msg, 'error')
+            }
+        } catch (err) {
+            showAlert(error.message, 'error')
+            return;
+        }
+    }
+
+    document.getElementById("add_comment").addEventListener('submit', addProjectComment)
+
+
+    fetchProjectData();
+</script>

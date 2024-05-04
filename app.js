@@ -1,85 +1,63 @@
-import express from "express";
-import dotenv from "dotenv";
-import exphbs from "express-handlebars";
-import cookieParser from "cookie-parser";
+import express from "express"
 import connectToDB from "./db/connectToMongoDB.js";
-import configRoutes from "./routes/index.js";
-import jwt from "jsonwebtoken";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import cors from "cors";
-
+import cors from 'cors';
+import mainRouter from "./routes/index.js";
+import path from 'path';
+import hbs from 'hbs'
+import exphbs from "express-handlebars";
 const app = express();
-dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const staticDir = express.static(__dirname + "/public");
 
-app.use("/public", staticDir);
+app.use(cors());
 app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
-app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
+app.use(express.urlencoded({ extended: true }))
 
-const rewriteUnsupportedBrowserMethods = (req, res, next) => {
-  if (req.body && req.body._method) {
-    req.method = req.body._method;
-    delete req.body._method;
-  }
-  next();
-};
-app.use(rewriteUnsupportedBrowserMethods);
+app.use(express.static('./public'))
 
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://localhost:3000",
-  })
-);
 
-app.use((req, res, next) => {
-  const token = req.cookies.token?.token;
-  if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        res.redirect("/auth/login");
-      } else {
-        req.user = decoded;
-        next();
-      }
-    });
-  } else {
-    const nonAuthenticatedRoutes = ["/auth/login", "/auth/register"];
-    if (!nonAuthenticatedRoutes.includes(req.path)) {
-      res.redirect("/auth/login");
-    } else {
-      next();
-    }
-  }
-});
+app.engine('handlebars', exphbs.engine({ defaultLayout: 'main', layoutsDir: './views/layouts' }));
+app.set('view engine', 'handlebars');
 
-app.use("/auth/login", (req, res, next) => {
-  if (req.method === "GET") {
-    if (req.user) {
-      res.redirect("/home");
-    } else next();
-  } else next();
-});
+hbs.registerPartials('./views/partials')
 
-app.use("/auth/register", (req, res, next) => {
-  if (req.method === "GET") {
-    if (req.user) {
-      res.redirect("/home");
-    } else next();
-  } else next();
-});
+app.use("/api/v1/", mainRouter);
 
-configRoutes(app);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, (req, res) => {
-  connectToDB();
-  console.log(`Your server is running on port ${PORT}`);
-});
+app.get('/login', (req, res) => {
+    res.render('Authentication/login')
+})
+
+app.get('/forget-password', (req, res) => {
+    res.render('Authentication/forget-password')
+})
+
+app.get('/reset-password/:token?', (req, res) => {
+    res.render('Authentication/reset-password')
+})
+
+app.get('/register', (req, res) => {
+    res.render('Authentication/register')
+})
+
+app.get('/dashboard', (req, res) => {
+    res.render('dashboard')
+})
+
+app.get('/create-project', (req, res) => {
+    res.render('create-project')
+})
+
+app.get('/show-project', (req, res) => {
+    res.render('show-project')
+})
+app.get('/profile', (req, res) => {
+    res.render('profile')
+})
+app.get('/report', (req, res) => {
+    res.render('report')
+})
+
+app.listen('3000', (req, res) => {
+    connectToDB();
+    console.log("Your server is running on http://localhost:3000")
+})

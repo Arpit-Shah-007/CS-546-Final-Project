@@ -1,0 +1,90 @@
+<div class="container">
+    {{> navbar}}
+</div>
+<div class="container">
+    <div class="row justify-content-around ">
+        {{!-- <div class="col-6 col-md-4 border rounded filter-section">
+            <h3 class="mt-1 mb-2">Filter</h3>
+            <div class="row-3 ">
+                <button type="button" class="btn btn-primary mb-2">Primary</button>
+                <button type="button" class="btn btn-primary mb-2">Primary</button>
+                <button type="button" class="btn btn-primary mb-2">Primary</button>
+                <button type="button" class="btn btn-primary mb-2">Primary</button>
+                <button type="button" class="btn btn-primary mb-2">Primary</button>
+                <button type="button" class="btn btn-primary mb-2">Primary</button>
+            </div>
+
+
+        </div> --}}
+
+        <div class="col-12 col-sm-6 col-md-8 col-md-offset-2 border rounded dashboard-showcase-sec" id="project_list">
+
+        </div>
+    </div>
+</div>
+
+<script>
+    deletelocalId()
+    checkIsLogin()
+    const fetchProjects = async (search) => {
+        try {
+            checkIsLogin()
+            document.querySelector("#project_list").innerHTML = ""
+            let url = search && search != "" ? '/project' + `?search=${search}` : '/project'
+            let response = await fetch(_base_url + url, {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("user-token")
+                }
+            })
+            let data = await response.json()
+            if (data && data.status) {
+                data?.data?.forEach(project => {
+                    let container = document.createElement('div');
+
+                    container.innerHTML = `<div class="mb-2 mt-2 rounded d-flex justify-content-center" onclick="storelocalId('${project._id}')" id="cursor-pointer">
+        <div class="card profile mt-2" style="width: 40rem;">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img class="avatar" src="/image/avatar2.png" alt="Avatar">
+                </div>
+                <div class="col px-0">
+                    <h4 class="mb-0">${project?.author?.firstName} ${project?.author?.lastName}</h4>
+                </div>
+            </div>
+            <div class="card-body border rounded mt-2">
+                <p class="card-text">${project.title} - ${project.description}</p>
+            </div>
+            <video class="card-img-top border rounded mt-2" src="${project.videoLink}" controls
+                alt="Card image cap"></video>
+
+        </div>
+    </div>`;
+
+                    document.querySelector("#project_list").appendChild(container.firstChild);
+                });
+
+            } else {
+                showAlert(data.msg, 'error')
+            }
+        } catch (err) {
+            console.log("fetch project error")
+            console.log(err)
+            showAlert(err.message, 'error')
+        }
+    }
+
+    const searchProject = (e) => {
+        e.preventDefault()
+        let search = document.getElementById("search").value
+        if (search && search.trim() != "") {
+            fetchProjects(search)
+        } else {
+            fetchProjects()
+        }
+    }
+
+    document.querySelector('#search_form').addEventListener('submit', searchProject)
+
+    fetchProjects()
+</script>
