@@ -76,6 +76,7 @@ app.use("/auth/register", (req, res, next) => {
   } else next();
 });
 
+
 app.get("/login", (req, res) => {
   res.render("login");
 });
@@ -106,13 +107,3 @@ app.listen(PORT, (req, res) => {
   connectToDB();
   console.log(`Your server is running on port ${PORT}`);
 });
-
-
-
-
-
-
-
-
-
-
