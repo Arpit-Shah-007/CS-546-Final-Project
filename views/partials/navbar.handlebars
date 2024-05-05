@@ -1,0 +1,24 @@
+<nav class="navbar navbar-light justify-content-between my-3 ">
+    <a class="navbar-brand text-primary" id="cursor-pointer" onclick="window.location.href='dashboard'">PROJEX</a>
+    <form class="form-inline" id="search_form">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
+        <button class="btn btn-outline-primary " type="submit">Search</button>
+
+    </form>
+    <div>
+        <button type="button" class="btn btn-secondary mr-2" data-toggle="tooltip" data-placement="top"
+            title="Add Project" onclick="window.location.href='create-project'">
+            +
+        </button>
+
+        <div class="btn-group " id="cursor-pointer">
+            <img class="avatar dropdown-toggle" src="/image/avatar2.png" alt="Avatar" id="dropdownMenu2"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="dropdown-menu">
+                <a class="dropdown-item" onclick="window.location.href='profile'">Profile</a>
+                <a class="dropdown-item" onclick="logOut()">Log Out</a>
+            </div>
+        </div>
+    </div>
+
+</nav>
