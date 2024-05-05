@@ -1,47 +1,50 @@
-<div class="container">
+<div class="container-fluid px-0">
     {{> navbar}}
 </div>
-<div class="container">
-    <h4>Upload Project</h4>
-    <p>Post a Project video to your account.</p>
-    <div class="container d-flex p-5 border justify-content-around">
-        <div class="d-flex flex-column border rounded align-items-center justify-content-end">
-            <video class="video-upload-sec p-3" src="" controls id="project_video"></video>
-            <div class="my-3">
-                <input type="file" accept="video/*" hidden name="videoLink" id="upload-feature"
-                    onchange="setPreviewVideo(event)" />
-                <div class="error-message" id="videoError"></div>
-                <label class="btn btn-primary rounded" for="upload-feature">Upload Video</label>
+<h1 class="mt-5 d-flex justify-content-center">Create Your Project</h1>
+<div class="container-fluid d-flex justify-content-center align-items-center" >
+    
+    <div class="card w-50 bg-base-100 shadow-xl mt-10">
+        <form id="createProjectForm" action="/project" method="POST" enctype="multipart/form-data">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="branch">Branch</label>
+                    <input type="text" class="form-control" id="branch" name="branch" placeholder="Enter branch" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" class="form-control" id="author" name="author" placeholder="Enter author" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="videoLink" class="form-label">Upload Video file</label>
+                    <input class="form-control" type="file" id="video" name="video" accept="video/*" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-25 mx-auto">Submit</button>
             </div>
-        </div>
-        <div class="w-75 p-3">
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" placeholder="Title" name="title" class="form-control y-2" id="title">
-                <div class="error-message" id="titleError"></div>
-            </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <input type="text" placeholder="Description" name="description" class="form-control y-2"
-                    id="description">
-                <div class="error-message" id="descriptionError"></div>
-            </div>
-            <div class="form-group">
-                <label for="branch">Branch</label>
-                <input type="text" placeholder="Branch" name="branch" class="form-control y-2" id="branch">
-                <div class="error-message" id="branchError"></div>
-            </div>
-            <div class="form-group">
-                <label for="subject">Subject</label>
-                <input type="text" placeholder="Subject" name="subject" class="form-control y-2" id="subject">
-                <div class="error-message" id="subjectError"></div>
-            </div>
-            <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-danger" id="discardButton">Discard</button>
-                <button type="button" class="btn btn-success" id="create_project">Post</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
+
+
+<script>
+    const form = document.getElementById('createProjectForm');
+
+    form.addEventListener('submit', function(e){
+        console.log('submitting')
+        // Additional logic can be added here if needed
+    });
+</script>
 

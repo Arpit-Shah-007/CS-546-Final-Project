@@ -88,28 +88,28 @@ const seedUsers = async () => {
     ]);
 
 
-      await Project.create([
-      {
-        title: "Project 1",
-        description: "Description of Project 1",
-        branch: "Engineering",
-        subject: "Web Development",
-        author: "5a9427648b0beebeb6957a22",
-        videoLink: "https://example.com/project1",
-        likes: ["5a9427648b0beebeb6957b6e", "5a9427648b0beebeb6957a38", "5a9427648b0beebeb6957c7a", "5a9427648b0beebeb6957abd"],
-        dislikes: []
-      },
-      {
-        title: "Project 2",
-        description: "Description of Project 2",
-        branch: "Science",
-        subject: "Machine Learning",
-        author: "5a9427648b0beebeb695821f",
-        videoLink: "https://example.com/project2",
-        likes: ["5a9427648b0beebeb6957a22"],
-        dislikes: ["5a9427648b0beebeb6957b6e", "5a9427648b0beebeb6957a38", "5a9427648b0beebeb6957c7a", "5a9427648b0beebeb6957abd"]
-      },
-    ]);
+    //   await Project.create([
+    //   {
+    //     title: "Project 1",
+    //     description: "Description of Project 1",
+    //     branch: "Engineering",
+    //     subject: "Web Development",
+    //     author: "5a9427648b0beebeb6957a22",
+    //     videoLink: "https://example.com/project1",
+    //     likes: ["5a9427648b0beebeb6957b6e", "5a9427648b0beebeb6957a38", "5a9427648b0beebeb6957c7a", "5a9427648b0beebeb6957abd"],
+    //     dislikes: []
+    //   },
+    //   {
+    //     title: "Project 2",
+    //     description: "Description of Project 2",
+    //     branch: "Science",
+    //     subject: "Machine Learning",
+    //     author: "5a9427648b0beebeb695821f",
+    //     videoLink: "https://example.com/project2",
+    //     likes: ["5a9427648b0beebeb6957a22"],
+    //     dislikes: ["5a9427648b0beebeb6957b6e", "5a9427648b0beebeb6957a38", "5a9427648b0beebeb6957c7a", "5a9427648b0beebeb6957abd"]
+    //   },
+    // ]);
 
     console.log("Seed data inserted successfully");
   } catch (error) {

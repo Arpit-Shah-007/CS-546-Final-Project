@@ -1,50 +1,73 @@
-<div class="container">
-    {{> navbar}}
-</div>
-<div class="container">
-    <div class="container d-flex p-5 border justify-content-around">
-        <div class="d-flex flex-column border rounded align-items-center justify-content-center">
-            <video class="video-upload-sec p-3" id="project_video" controls></video>
+<div class="container-fluid px-0">
+   <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
+    <a class="navbar-brand text-primary cursor-pointer" id=""
+        onclick="navigate('/')">PROJEX</a>
+    <form class="form-inline" id="search_form">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
+        <button class="btn btn-outline-primary " type="submit">Search</button>
+
+    </form>
+    <div>
+        <button type="button" class="btn btn-danger mr-10" 
+            title="Add Project" onclick="navigate('/reportList')">
+            Reports
+        </button>
+        <button type="button" class="btn btn-outline-primary mr-10" 
+            title="Add Project" onclick="navigate('/create')">
+            Create Project
+        </button>
+        
+
+        <div class="btn-group mr-10     " id="cursor-pointer">
+            <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="dropdown-menu dropdown-menu-left">
+                <a class="dropdown-item" onclick="navigate('/profile')">Profile</a>
+                <a class="dropdown-item" onclick="logOut()">Log Out</a>
+            </div>
         </div>
+    </div>
+
+</nav>
+</div>
+
+<div class="container mt-5">
+    <div class="container d-flex p-5 border justify-content-around">
+        
         <div class="w-75 p-3">
+            <div class="video-container rounded mb-3">
+                <video controls>
+                    <source src="{{ project.videoLink }}" type="video/mp4">
+                </video>
+            </div>
             <div class="row align-items-top">
                 <div class="col-auto">
-                    <img class="avatar" src="/image/avatar2.png" alt="Avatar">
+                    <img class="avatar" src="https://avatar.iran.liara.run/public" alt="Avatar">
                 </div>
                 <div class="col px-0">
-                    <h4 class="mb-0" id="author_name"></h4>
-                    <p id="project_description">Description</p>
-                </div>
-
-            </div>
-            <div>
-
-
-
-                <div class="d-flex justify-content-around">
-                    <button type="button" class="btn btn-success" id="project_like">Like</button>
-                    <button type="button" class="btn btn-warning" id="project_dislike">DisLike</button>
-                    <button type="button" class="btn btn-danger" onclick="navigate('/report')">Report</button>
-
-                </div>
-                <div class="d-flex flex-column justify-content-between border rounded  project-comment-sec mt-2">
-                    <h5 class="p-3">Comments</h5>
-                    <div class="comment-sec px-3" id="comment_list">
-
-                    </div>
-
-                    <div class="d-flex justify-content-center m-3">
-
-                        <form class="form-inline" method="post" id="add_comment">
-                            <input class="form-control mr-sm-2" type="text" placeholder="Add Comment"
-                                aria-label="comment" id="comment">
-                            <button class="btn btn-outline-primary " type="submit">Comment</button>
-
-                        </form>
-                    </div>
+                    <h4 class="mb-0" id="author_name">{{ project.author.firstName }}</h4>
                 </div>
             </div>
-
+            <div class="mt-3">
+                <p>{{ project.description }}</p>
+            </div>
+            <div class="mt-3">
+                <button type="button" class="btn btn-success mr-2" id="project_like">Like</button>
+                <button type="button" class="btn btn-warning mr-2" id="project_dislike">Dislike</button>
+                <button type="button" class="btn btn-danger" onclick="navigate('/report')">Report</button>
+            </div>
+            <div class="border rounded mt-3 p-3">
+                <h5 class="mb-3">Comments</h5>
+                <div class="comment-sec" id="comment_list">
+                    <!-- Comment list goes here -->
+                </div>
+                <form class="mt-3" method="post" id="add_comment">
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="Add Comment" aria-label="comment" id="comment">
+                    </div>
+                    <button class="btn btn-outline-primary" type="submit">Comment</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

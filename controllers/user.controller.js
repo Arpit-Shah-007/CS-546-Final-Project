@@ -23,7 +23,9 @@ export const getUserById = async (req, res) => {
       throw "Please enter a valid string";
     }
     const user = await userData.getUserById(id);
-    res.json(user);
+    //res.json(user);
+
+    res.render('profile', user);
   } catch (e) {
     res.status(404).json({ error: e });
   }

@@ -4,8 +4,8 @@ import { Types } from "mongoose";
 export const createComment = async (req, res) => {
   try {
     const content = req.body.content;
-    const userId = req.user.id;
-    const projectId = req.params.projectId;
+    const userId = req.body.id;
+    const projectId = req.body.projectId;
     if (!content || !userId || !projectId) {
       throw "All fields are required";
     }
@@ -15,7 +15,7 @@ export const createComment = async (req, res) => {
       typeof userId !== "string" ||
       userId.length === 0 ||
       typeof projectId !== "string" ||
-      postId.length === 0
+      projectId.length === 0
     ) {
       throw "Please enter a valid string";
     }
@@ -29,7 +29,7 @@ export const createComment = async (req, res) => {
     );
     res.json(comment);
   } catch (e) {
-    res.status(400).json({ error: e });
+    res.status(400).json({ error: e.message });
   }
 };
 

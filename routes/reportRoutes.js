@@ -1,5 +1,7 @@
 import express from "express";
-import { createReport, getAllReports, getReportById, deleteReportById } from "../controllers/report.controller.js";
+import {createReport,getAllReports,getReportById,deleteReportById} from "../controllers/report.controller.js"
+//import { authMiddleware } from "../middleware/authMiddleware";
+
 const router = express.Router();
 
 // Route to create a new report
@@ -9,10 +11,10 @@ router.post("/", createReport);
 router.get("/", getAllReports);
 
 // Route to fetch a single report by ID
-router.get("/:reportId", getReportById);
+router.get("/:id", getReportById);
 
 // Route to delete a report by ID
-router.delete("/:reportId", deleteReportById);
+router.delete("/:id", deleteReportById);
 
 
 export default router;
