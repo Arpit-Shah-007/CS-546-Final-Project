@@ -45,7 +45,8 @@ export const getAllReports = async (req, res) => {
         const reports = await Report.find({}).populate('reportedBy').lean();
         //console.log(reports)
         res.render('reportList',{
-            reports: reports
+            reports: reports,
+            title: "Reports"
         });
     } catch (error) {
         res.status(500).json({ error: error.message });

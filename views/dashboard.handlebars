@@ -8,7 +8,7 @@
     <div>
         {{#if isAdmin}}
         <button type="button" class="btn btn-danger mr-10" 
-            title="Add Project" onclick="navigate('/reportList')">
+            title="Add Project" onclick="navigate('/report')">
             Reports
         </button>
         {{/if}}
@@ -34,10 +34,29 @@
 <div class="container mt-10 ">
     <div class="container">
         <div class="row">
-            <div class=" col text-center mb-3"> <!-- Add this div to align the dropdown to the right -->
+            <div class=" col text-center mb-3"> 
         <div class="btn-group">
             <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                Filter
+                Filter by branch
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/project/search?searchParam=Data Visualization">Computer Science</a></li>
+                <li><a class="dropdown-item" href="#">Management</a></li>
+                <li><a class="dropdown-item" href="#">Physics</a></li>
+                <li><a class="dropdown-item" href="#">Mechanical Engineering</a></li>
+                <li><a class="dropdown-item" href="#">Economics</a></li>
+                <li><a class="dropdown-item" href="#">Web Development</a></li>
+                <li><a class="dropdown-item" href="#">Machine Learning</a></li>
+                <li><a class="dropdown-item" href="#">Quantitative</a></li>
+                <li><a class="dropdown-item" href="#">Business</a></li>
+                <li><a class="dropdown-item" href="#">Artificial Intelligence</a></li>
+                <li><a class="dropdown-item" href="#">Datastructure</a></li>
+                
+            </ul>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Filter by subject
             </button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/project/search?searchParam=Data Visualization">Computer Science</a></li>
@@ -55,7 +74,7 @@
             </ul>
         </div>
     </div>
-    <div class=" col text-center mb-3"> <!-- Add this div to align the dropdown to the right -->
+    <div class=" col text-center mb-3"> 
         <div class="btn-group">
             <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 SORT

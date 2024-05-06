@@ -7,13 +7,13 @@ import { ObjectId } from "mongodb";
 export const createProject = async (req, res) => {
     //console.log("object")
     try {
-        const { title } = req.body;
-        const { description } = req.body;
-        const { branch} = req.body;
-        const { subject } = req.body;
-        const { link } = req.body;
-        const {resource} = req.body;
-
+        const  title  = req.body.title;
+        const description  = req.body.description;
+        const  branch = req.body.branch;
+        const  subject  = req.body.subject;
+        const  link  = req.body.link;
+        const resource = req.body.resources;
+        
         const  author  = req.user.id;
         let videoLink;
         if (req.file) {
@@ -32,7 +32,7 @@ export const createProject = async (req, res) => {
         if (!resource || resource.trim() === "") throw  'Please provide a valid Resource'
         if (!author || author.trim() === "") throw  'Please provide a valid author'
         if (!videoLink || videoLink.trim() === "") throw 'Video must be provided'
-
+        
         // Checking correct types
         if (typeof title !== 'string') throw  'Title should be a string'
         if (typeof description !== 'string') throw  'Description should be a string'
@@ -42,7 +42,7 @@ export const createProject = async (req, res) => {
         if (typeof resource !== 'string') throw  'Resource should be a string'
         if (typeof author !== 'string' && !Types.ObjectId.isValid(author)) throw 'Author should be a string or a valid ObjectId'
         if (typeof videoLink !== 'string') throw  'Video link should be a string'
-
+        
         const project = await createProjectInDB(
             title,
             description,
@@ -55,10 +55,13 @@ export const createProject = async (req, res) => {
         );
 
         //log before sending the response
-        //console.log(project);
+        console.log(project);
 
         //res.status(201).json(newProject);
-        res.render('show-project', {project: project.toObject()})
+        res.render('show-project', {
+            project: project.toObject(),
+            title: "Project"
+        })
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -84,7 +87,10 @@ export const renderUpdate = async (req, res) => {
         }
 
         // Render the update page with the project data
-        res.render("updateProject", { project: project.toObject() });
+        res.render("updateProject", { 
+            project: project.toObject(),
+            title: "Update Project" 
+        });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -196,7 +202,8 @@ export const getProjectById = async (req, res) => {
             id,
             user,
             project: project.toObject(),
-            isAdmin: isAdmin
+            isAdmin: isAdmin,
+            title: "Project"
         });
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -207,7 +214,7 @@ export const getProjectById = async (req, res) => {
 export const searchProjects = async (req, res) => {
     try {
         const { searchParam } = req.query;
-        console.log(searchParam)
+        //console.log(searchParam)
         //console.log(searchParam)
         const projects = await findProjectForSearch(searchParam);
         //console.log(projects)
@@ -225,6 +232,7 @@ export const searchProjects = async (req, res) => {
                 projects,
                 user,
                 isAdmin,
+                title: "Dashboard"
             });
         }
     } catch (error) {
@@ -284,6 +292,7 @@ export const sortProjects = async (req, res) => {
                 projects,
                 user,
                 isAdmin,
+                title: "Dashboard"
             });
     } catch (error) {
         res.status(500).json({ message: error.message });

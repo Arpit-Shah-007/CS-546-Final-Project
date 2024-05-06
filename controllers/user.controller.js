@@ -26,9 +26,15 @@ export const getUserById = async (req, res) => {
     const {user, projects, likesCount, dislikesCount} = await userData.getUserById(id);
     //res.json(user);
     //console.log(user)
-    console.log(projects[0])
+    //console.log(projects[0])
 
-    res.render('profile', {user, projects, likesCount, dislikesCount});
+    res.render('profile', {
+      user, 
+      projects, 
+      likesCount, 
+      dislikesCount,
+      title: "Profile"
+    });
   } catch (e) {
     res.status(404).json({ error: e });
   }
@@ -59,8 +65,8 @@ export const updateUser = async (req, res) => {
     const email = req.body.email;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
-    const profilePic = req.body.profilePic;
-    if (!id || !email || !firstName || !lastName || !profilePic) {
+    //const profilePic = req.body.profilePic;
+    if (!id || !email || !firstName || !lastName ) {
       throw "All fields are required";
     }
     if (typeof id !== "string" || id.length === 0) {
@@ -72,14 +78,12 @@ export const updateUser = async (req, res) => {
       typeof firstName !== "string" ||
       firstName.length === 0 ||
       typeof lastName !== "string" ||
-      lastName.length === 0 ||
-      typeof profilePic !== "string" ||
-      profilePic.length === 0
+      lastName.length === 0
     ) {
       throw "Please enter a valid string";
     }
     if (!Types.ObjectId.isValid(id)) {
-      throw "Please enter a valid id";
+      throw "Invalid Id";
     }
     if (!/^[a-zA-Z]{2,25}$/.test(firstName)) {
       throw "Invalid first name.";
@@ -105,8 +109,7 @@ export const updateUser = async (req, res) => {
       id,
       email,
       firstName,
-      lastName,
-      profilePic
+      lastName
     );
     res.json(user);
   } catch (e) {

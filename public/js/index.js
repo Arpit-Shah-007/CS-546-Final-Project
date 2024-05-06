@@ -11,3 +11,8 @@ document.addEventListener("DOMContentLoaded", function() {
 function redirectToReportPage() {
     window.location.href = '/report';
 }
+
+function logOut() {
+    console.log("Logging out...");
+    window.location.href = "/logout"; 
+}

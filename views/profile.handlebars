@@ -40,10 +40,48 @@
             <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
               <img src="https://avatar.iran.liara.run/public" alt="Avatar" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px; z-index: 1">
-              <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+              {{!-- <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark" data-mdb-ripple-color="dark"
                 style="z-index: 1;">
                 Edit profile
+              </button> --}}
+              <button type="button" data-mdb-button-init data-mdb-ripple-init  style="z-index: 1;" class="btn btn-outline-dark"  data-mdb-ripple-color="dark" data-toggle="modal" data-target="#editProfileModal" >
+                Edit Profile
               </button>
+              <!-- Modal -->
+                  <!-- Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered rounded-lg" role="document">
+    <div class="modal-content rounded-lg">
+      <div class="modal-header bg-dark text-white rounded-top">
+        <h5 class="modal-title" id="editProfileModalLabel">Update User Profile</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editProfileForm">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control rounded-pill" id="firstName" name="firstName" value="{{user.firstName}}">
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control rounded-pill" id="lastName" name="lastName" value="{{user.lastName}}">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control rounded-pill" id="email" name="email" value="{{user.email}}">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control rounded-pill" id="password" name="password" placeholder="Enter new password">
+          </div>
+          <button type="submit" class="btn btn-outline-success btn-block rounded-pill">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
             </div>
             <div class="ms-3" style="margin-top: 130px;">
               <h5>{{user.firstName}}</h5>
@@ -98,6 +136,7 @@
 </section>
 
 <script>
+  
     function navigate(route) {
     window.location.href = route;
 }
@@ -129,5 +168,36 @@ function logOut(){
         console.error('Error:', error);
     });
 }
+
+function updateUserProfile(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const password = formData.get('password');
+
+    // If the password field is empty, remove it from the form data
+    if (!password || password.trim() === "") {
+      formData.delete('password');
+    }
+
+    // Send the update request to the server
+    fetch(`http://localhost:3000/user/update/${userId}`, {
+      method: 'PUT',
+      body: formData
+    })
+    .then(response => {
+      if (response.ok) {
+        // Handle successful response
+        alert('User profile updated successfully');
+        location.reload();
+      } else {
+        // Handle error response
+        alert('Failed to update user profile');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
 
 </script>

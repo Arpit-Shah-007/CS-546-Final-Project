@@ -1,44 +1,158 @@
-<section class="container-auth forms">
-    <div class="form login">
-        <div class="form-content">
-            <header>Register</header>
-            <form class="auth-form" id="register_form" action="http://localhost:3000/auth/register" method="post">
-    <div class="field input-field">
-        <input type="text" placeholder="First Name" class="input" id="firstName" name="firstName">
-        <div class="error-message" id="firstNameError"></div>
-    </div>
+<main>
+  <section class="gradient-form" >
+    <div class="container py-5">
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-xl-16">
+          <div class="card rounded-3 text-black">
+            <div class="row g-0">
+              <div class="col-lg-6">
+                <div class="card-body p-md-5 mx-md-4">
+                  <div class="text-center d-flex flex-column align-items-center">
+                    <img src="../public/images/projex-high-resolution-logo.png" style="width: 185px;" alt="logo">
+                    <h4 class="mt-1 mb-5 pb-1">We are The Projex Team</h4>
+                    </div>
 
-    <div class="field input-field">
-        <input type="text" placeholder="Last Name" class="input" id="lastName" name="lastName">
-        <div class="error-message" id="lastNameError"></div>
-    </div>
 
-    <div class="field input-field">
-        <input type="email" placeholder="Email" class="input" id="email" name="email">
-        <div class="error-message" id="emailError"></div>
-    </div>
+                  <form id="register-form" class="register-form">
 
-    <div class="field input-field">
-        <input type="password" placeholder="Password" class="password" id="password" name="password">
-        <i class='bx bx-hide eye-icon'></i>
-        <div class="error-message" id="passwordError"></div>
-    </div>
-    <div class="field input-field">
-        <input type="password" placeholder="Confirm Password" class="password" id="confirmPassword" name="confirmPassword">
-        <i class='bx bx-hide eye-icon'></i>
-        <div class="error-message" id="confirmPasswordError"></div>
-    </div>
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="firstName">FirstName</label>
+                      <input type="text" id="firstName" name="firstName" class="form-control" />
+                    </div>
 
-    <div class="field button-field">
-        <button type="submit">Register</button>
-    </div>
-</form>
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="lastName">LastName</label>
+                      <input type="text" id="lastName" name="lastName" class="form-control" />
+                    </div>
 
-            <div class="text-center mt-10">
-                <a href="/login">Already have an account?</a>
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="email">Email</label>
+                      <input type="email" id="email" name="email" class="form-control"
+                        placeholder="username@stevens.edu" />
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="password">Password</label>
+                      <input type="password" id="password" name="password" class="form-control"
+                        aria-describedby="passwordHelpBlock" />
+                      <div id="passwordHelpBlock" class="form-text">
+                        Your password must be 8 characters long, should contain uppercase letter, digit and a special
+                        character(@$!%*?&), and must not contain spaces or emoji.
+                      </div>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="confirmPassword">Confirm Password</label>
+                      <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" />
+                    </div>
+
+                    <div class="text-center pt-1 mb-5 pb-1">
+                      <button id="signin-button" class="btn btn-outline-success btn-block fa-lg  mb-3" type="submit">
+                        Register</button>
+                    </div>
+                  </form>
+                  <div id="error-block" class="error-block text-danger" hidden></div>
+                  <div class="d-flex align-items-center justify-content-center pb-4">
+                    <p class="mb-0 mr-4 me-2">Already have an account?</p>
+                    <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger">
+                      <a href="/auth/login">Login</a>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+                <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                  <h2 class="mb-3">Projex</h2>
+                  <p class="small mb-0">A project sharing platform that is made specifically for Stevens Community</p>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</section>
+  </section>
+</main>
 
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let firstName = document.getElementById('firstName');
+    let lastName = document.getElementById('lastName');
+    let email = document.getElementById('email');
+    let password = document.getElementById('password');
+    let confirmPassword = document.getElementById('confirmPassword');
+    let profilePic = document.getElementById('profilePic');
+    let registerForm = document.getElementById('register-form');
+    let errorDiv = document.getElementById('error-block');
+
+    if (registerForm) {
+      registerForm.addEventListener("submit", (e) => {
+        let errors = [];
+        if (errorDiv) {
+          errorDiv.innerHTML = "";
+          errorDiv.hidden = true;
+        }
+        if (
+          !firstName.value ||
+          firstName.value.trim().length === 0 ||
+          !/^[a-zA-Z]{2,25}$/.test(firstName.value.trim())
+        ) {
+          errors.push("FirstName must be a valid String");
+        }
+
+        if (
+          !lastName.value ||
+          lastName.value.trim().length === 0 ||
+          !/^[a-zA-Z]{2,25}$/.test(lastName.value.trim())
+        ) {
+          errors.push("LastName must be a valid String");
+        }
+
+        email.value = email.value.toLowerCase();
+        if (
+          !email.value ||
+          email.value.trim().length === 0 ||
+          !/^[a-zA-Z][a-zA-Z0-9]*@stevens\.edu$/.test(email.value.trim())
+        ) {
+          errors.push("Email must be a valid Stevens email address");
+        }
+
+        if (
+          !password.value ||
+          password.value.trim().length === 0 ||
+          !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])\S{8,}$/.test(password.value.trim())
+        ) {
+          errors.push("Password must match the requirements");
+        }
+
+        if (
+          !confirmPassword.value ||
+          confirmPassword.value.trim().length === 0 ||
+          confirmPassword.value.trim() !== password.value.trim()
+        ) {
+          errors.push("Passwords do not match");
+        }
+
+        if (
+          !profilePic.value ||
+          profilePic.value.trim().length === 0
+        ) {
+          errors.push("Profile Pic must be a valid String URL");
+        }
+
+        if (errors.length > 0) {
+          e.preventDefault();
+          errorDiv.hidden = false;
+          errors.forEach((error) => {
+            errorDiv.innerHTML += `<p>${error}</p>`;
+          });
+        }
+      });
+    }
+  });
+  
+
+
+
+</script>

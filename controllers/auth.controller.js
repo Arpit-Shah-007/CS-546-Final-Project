@@ -3,16 +3,12 @@ import { userData } from "../data/index.js";
 export const register = async (req, res) => {
   try {
     //console.log(req.body)
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      confirmPassword,
-      // profilePic,
-      //role,
-    } = req.body;
-    
+    const { firstName } = req.body
+    const { lastName } = req.body
+    const { email } = req.body
+    const { password } = req.body
+    const { confirmPassword } = req.body
+    //console.log(lastName)
     if (!firstName) {
       throw "FirstName is required";
     }
@@ -58,7 +54,7 @@ export const register = async (req, res) => {
     ) {
       throw "Invalid email";
     }
-    console.log("3")
+    
     if (
       typeof password !== "string" ||
       password.trim().length === 0 ||
@@ -109,7 +105,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    console.log("In controller")
+    
     const { email }  = req.body;
     const { password } = req.body;
 

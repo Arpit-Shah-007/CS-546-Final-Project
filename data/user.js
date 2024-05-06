@@ -81,7 +81,7 @@ export const registerUser = async (
 export const loginUser = async (email, password) => {
   email = email.trim();
   password = password.trim();
-  console.log("In data")
+  
 
   if (!email || !password) {
     throw "All fields are required";
