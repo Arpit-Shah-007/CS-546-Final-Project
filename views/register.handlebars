@@ -1,0 +1,171 @@
+<main>
+  <section class="h-100 gradient-form" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-xl-16">
+          <div class="card rounded-3 text-black">
+            <div class="row g-0">
+              <div class="col-lg-6">
+                <div class="card-body p-md-5 mx-md-4">
+                  <div class="text-center">
+                    <img src="../public/images/projex-high-resolution-logo.jpg" style="width: 185px;" alt="logo">
+                  </div>
+
+                  <form id="register-form" class="register-form" action="/auth/register" method="POST">
+                    <h4>Create a New Account</h4>
+                    <br>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="firstName">FirstName</label>
+                      <input type="text" id="firstName" name="firstName" class="form-control" />
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="lastName">LastName</label>
+                      <input type="text" id="lastName" name="lastName" class="form-control" />
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="email">Email</label>
+                      <input type="email" id="email" name="email" class="form-control"
+                        placeholder="username@stevens.edu" />
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="password">Password</label>
+                      <input type="password" id="password" name="password" class="form-control"
+                        aria-describedby="passwordHelpBlock" />
+                      <div id="passwordHelpBlock" class="form-text">
+                        Your password must be 8 characters long, should contain uppercase letter, digit and a special
+                        character(@$!%*?&), and must not contain spaces or emoji.
+                      </div>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="confirmPassword">Confirm Password</label>
+                      <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" />
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="profilePic">Profile Pic</label>
+                      <input type="text" id="profilePic" name="profilePic" class="form-control"
+                        aria-describedby="profilePicHelpBlock" />
+                      <div id="profilePicHelpBlock" class="form-text">
+                        Enter a valid String URL for your profile picture.
+                      </div>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="role">Role</label>
+                      <select id="role" name="role" class="form-select">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </div>
+
+                    <div class="text-center pt-1 mb-5 pb-1">
+                      <button id="signin-button" class="btn btn-outline-success btn-block fa-lg  mb-3" type="submit">
+                        Register</button>
+                    </div>
+                  </form>
+                  <div id="error-block" class="error-block text-danger" hidden></div>
+                  <div class="d-flex align-items-center justify-content-center pb-4">
+                    <p class="mb-0 mr-4 me-2">Already have an account?</p>
+                    <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger"><a
+                        href="/auth/login">Login</a></button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+                <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                  <h2 class="mb-3">Projex</h2>
+                  <p class="small mb-0">A project sharing platform that is made specifically for Stevens Community
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let firstName = document.getElementById('firstName');
+    let lastName = document.getElementById('lastName');
+    let email = document.getElementById('email');
+    let password = document.getElementById('password');
+    let confirmPassword = document.getElementById('confirmPassword');
+    let profilePic = document.getElementById('profilePic');
+    let registerForm = document.getElementById('register-form');
+    let errorDiv = document.getElementById('error-block');
+
+    if (registerForm) {
+      registerForm.addEventListener("submit", (e) => {
+        let errors = [];
+        if (errorDiv) {
+          errorDiv.innerHTML = "";
+          errorDiv.hidden = true;
+        }
+        if (
+          !firstName.value ||
+          firstName.value.trim().length === 0 ||
+          !/^[a-zA-Z]{2,25}$/.test(firstName.value.trim())
+        ) {
+          errors.push("FirstName must be a valid String");
+        }
+
+        if (
+          !lastName.value ||
+          lastName.value.trim().length === 0 ||
+          !/^[a-zA-Z]{2,25}$/.test(lastName.value.trim())
+        ) {
+          errors.push("LastName must be a valid String");
+        }
+
+        email.value = email.value.toLowerCase();
+        if (
+          !email.value ||
+          email.value.trim().length === 0 ||
+          !/^[a-zA-Z][a-zA-Z0-9]*@stevens\.edu$/.test(email.value.trim())
+        ) {
+          errors.push("Email must be a valid Stevens email address");
+        }
+
+        if (
+          !password.value ||
+          password.value.trim().length === 0 ||
+          !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])\S{8,}$/.test(password.value.trim())
+        ) {
+          errors.push("Password must match the requirements");
+        }
+
+        if (
+          !confirmPassword.value ||
+          confirmPassword.value.trim().length === 0 ||
+          confirmPassword.value.trim() !== password.value.trim()
+        ) {
+          errors.push("Passwords do not match");
+        }
+
+        if (
+          !profilePic.value ||
+          profilePic.value.trim().length === 0
+        ) {
+          errors.push("Profile Pic must be a valid String URL");
+        }
+
+        if (errors.length > 0) {
+          e.preventDefault();
+          errorDiv.hidden = false;
+          errors.forEach((error) => {
+            errorDiv.innerHTML += `<p>${error}</p>`;
+          });
+        }
+      });
+    }
+  });
+</script>

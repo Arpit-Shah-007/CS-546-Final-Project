@@ -1,0 +1,235 @@
+<div class="container-fluid px-0">
+    <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
+        <a class="navbar-brand text-primary" href="/">PROJEX</a>
+        <form class="form-inline" id="search_form" action="/project/search" method="GET">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search"
+                name="searchParam">
+            <button class="btn btn-outline-primary " type="submit">Search</button>
+        </form>
+        <div>
+            {{#if isAdmin}}
+            <button id="reportButton" type="button" class="btn btn-danger mr-10" onclick="navigate('/reports')"
+                title="Add Project">
+                Reports
+            </button>
+            {{/if}}
+            <button type="button" class="btn btn-outline-primary mr-10" title="Add Project"
+                onclick="navigate('/project/create')">
+                Create Project
+            </button>
+
+            <div class="btn-group mr-10" id="cursor-pointer">
+                <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar"
+                    id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="dropdown-menu dropdown-menu-left">
+                    <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')">Profile</a>
+                    <a class="dropdown-item" onclick="logOut()">Log Out</a>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+</div>
+
+<h1 class="h2 mt-5 d-flex justify-content-center">Create Your Project</h1>
+<div class="container-fluid d-flex justify-content-center align-items-center">
+
+    <div class="card w-50 bg-base-100 shadow-xl mt-10 mb-20">
+        <form id="createProjectForm" action="http://localhost:3000/project" method="POST" enctype="multipart/form-data">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"
+                        placeholder="Enter description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="branch">Branch</label>
+                    <select class="form-control" id="branch" name="branch" required>
+                        <option value="" disabled selected>Select Branch</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Machine Learning">Machine Learning</option>
+                        <option value="Artificial Intelligence">Artificial Intelligence</option>
+                        <option value="Data Science">Data Science</option>
+                        <option value="Information Technology">Information Technology</option>
+                        <option value="Software Engineering">Software Engineering</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="Network Engineering">Network Engineering</option>
+                        <option value="Robotics">Robotics</option>
+                        <option value="Human-Computer Interaction">Human-Computer Interaction</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select class="form-control" id="subject" name="subject" required>
+                        <option value="" disabled selected>Select Subject</option>
+                        <option value="Algorithms and Data Structures">Algorithms and Data Structures</option>
+                        <option value="Operating Systems">Operating Systems</option>
+                        <option value="Software Engineering">Software Engineering</option>
+                        <option value="Deep Learning">Deep Learning</option>
+                        <option value="Reinforcement Learning">Reinforcement Learning</option>
+                        <option value="Natural Language Processing">Natural Language Processing</option>
+                        <option value="Knowledge Representation and Reasoning">Knowledge Representation and Reasoning
+                        </option>
+                        <option value="Computer Vision">Computer Vision</option>
+                        <option value="Intelligent Agents">Intelligent Agents</option>
+                        <option value="Statistical Analysis">Statistical Analysis</option>
+                        <option value="Data Visualization">Data Visualization</option>
+                        <option value="Big Data Analytics">Big Data Analytics</option>
+                        <option value="Information Security">Information Security</option>
+                        <option value="IT Infrastructure Management">IT Infrastructure Management</option>
+                        <option value="Cloud Computing">Cloud Computing</option>
+                        <option value="Agile Development">Agile Development</option>
+                        <option value="Quality Assurance">Quality Assurance</option>
+                        <option value="DevOps">DevOps</option>
+                        <option value="Network Security">Network Security</option>
+                        <option value="Cryptography">Cryptography</option>
+                        <option value="Cyber Threat Intelligence">Cyber Threat Intelligence</option>
+                        <option value="Routing and Switching">Routing and Switching</option>
+                        <option value="Network Protocols">Network Protocols</option>
+                        <option value="Wireless Networks">Wireless Networks</option>
+                        <option value="Autonomous Systems">Autonomous Systems</option>
+                        <option value="Human-Robot Interaction">Human-Robot Interaction</option>
+                        <option value="Robot Perception">Robot Perception</option>
+                        <option value="User Experience Design">User Experience Design</option>
+                        <option value="Interaction Design">Interaction Design</option>
+                        <option value="Accessibility Engineering">Accessibility Engineering</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="resources">Resources</label>
+                    <input type="text" class="form-control" id="resources" name="resources"
+                        placeholder="Enter any useful resource" required>
+                </div>
+                <div class="form-group">
+                    <label for="author">Link</label>
+                    <input type="text" class="form-control" id="link" name="link"
+                        placeholder="Provide the link for your GitHub code" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="videoLink" class="form-label">Upload Video file</label>
+                    <input class="form-control" type="file" id="video" name="video" accept="video/*" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-25 mx-auto">Submit</button>
+                <div id="error-block" class="error-block text-danger" hidden></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+<script>
+    function navigate(route) {
+        window.location.href = route;
+    }
+
+    function logOut() {
+        fetch('http://localhost:3000/auth/logout', {
+            method: 'GET'
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = `/`;
+                } else {
+                    console.error('Failed to logout');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function isValidUrl(url) {
+        const pattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/;
+        return pattern.test(url);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let title = document.getElementById('title');
+        let description = document.getElementById('description');
+        let branch = document.getElementById('branch');
+        let subject = document.getElementById('subject');
+        let resources = document.getElementById('resources');
+        let link = document.getElementById('link');
+        let video = document.getElementById('video');
+        let createProjectForm = document.getElementById('createProjectForm');
+        let errorDiv = document.getElementById('error-block');
+
+        if (createProjectForm) {
+            createProjectForm.addEventListener("submit", (e) => {
+                let errors = [];
+                if (errorDiv) {
+                    errorDiv.innerHTML = "";
+                    errorDiv.hidden = true;
+                }
+                if (!title.value || title.value.trim().length === 0) {
+                    errors.push("Title is required");
+                } else if (title.value.trim().length > 50) {
+                    errors.push("Title should not exceed 50 characters");
+                } else if (!/^[a-zA-Z0-9\s]+$/.test(title.value.trim())) {
+                    errors.push("Title should only contain letters, numbers, and spaces");
+                }
+
+                if (!description.value || description.value.trim().length === 0) {
+                    errors.push("Description is required");
+                } else if (description.value.trim().length > 200) {
+                    errors.push("Description should not exceed 200 characters");
+                } else if (!/^[a-zA-Z0-9\s\.,\?!]+$/.test(description.value.trim())) {
+                    errors.push("Description should only contain letters, numbers, spaces, and common punctuation marks");
+                }
+
+                if (!branch.value || branch.value.trim().length === 0) {
+                    errors.push("Branch is required");
+                } else if (!/^[a-zA-Z\s]+$/.test(branch.value.trim())) {
+                    errors.push("Branch should only contain letters and spaces");
+                }
+
+                if (!subject.value || subject.value.trim().length === 0) {
+                    errors.push("Subject is required");
+                } else if (!/^[a-zA-Z\s]+$/.test(subject.value.trim())) {
+                    errors.push("Subject should only contain letters and spaces");
+                }
+
+                if (!resources.value || resources.value.trim().length === 0) {
+                    errors.push("Resources is required");
+                } else if (!isValidUrl(resources.value.trim())) {
+                    errors.push("Invalid URL for resources");
+                }
+
+                if (!link.value || link.value.trim().length === 0) {
+                    errors.push("Link is required");
+                } else if (!isValidUrl(link.value.trim())) {
+                    errors.push("Invalid URL for link");
+                }
+
+                if (!video.files || video.files.length === 0) {
+                    errors.push("Video file is required");
+                } else {
+                    const validExtensions = ["mp4", "avi", "mov"];
+                    const fileExtension = video.files[0].name.split('.').pop().toLowerCase();
+                    if (!validExtensions.includes(fileExtension)) {
+                        errors.push("Invalid video file format. Please upload a file with .mp4, .avi, or .mov extension.");
+                    }
+                    const validMimeTypes = ["video/mp4", "video/avi", "video/quicktime"];
+                    const fileMimeType = video.files[0].type.toLowerCase();
+                    if (!validMimeTypes.includes(fileMimeType)) {
+                        errors.push("Invalid video file MIME type. Please upload a file with a valid video MIME type.");
+                    }
+                }
+
+                if (errors.length > 0) {
+                    e.preventDefault();
+                    errorDiv.hidden = false;
+                    errors.forEach((error) => {
+                        errorDiv.innerHTML += `<p>${error}</p>`;
+                    });
+                }
+            });
+        }
+    });
+</script>
