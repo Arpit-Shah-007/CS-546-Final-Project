@@ -4,7 +4,7 @@ import Project from "../models/projects.models.js";
 
 // Controller function to create project
 export const createProject = async (req, res) => {
-    console.log("object")
+    //console.log("object")
     try {
         const { title } = req.body;
         const { description } = req.body;
@@ -22,7 +22,7 @@ export const createProject = async (req, res) => {
         if (!description || description.trim() === "") throw  'Please provide a valid description'
         if (!branch || branch.trim() === "") throw  'Please provide a valid branch'
         if (!subject || subject.trim() === "") throw  'Please provide a valid subject'
-        if (!author || author.trim() === "") throw  'Please provide a valid author'
+        //if (!author || author.trim() === "") throw  'Please provide a valid author'
         if (!videoLink || videoLink.trim() === "") throw 'Video must be provided'
 
         // Checking correct types
@@ -30,10 +30,10 @@ export const createProject = async (req, res) => {
         if (typeof description !== 'string') throw  'Description should be a string'
         if (typeof branch !== 'string') throw  'Branch should be a string'
         if (typeof subject !== 'string') throw  'Subject should be a string'
-        if (typeof author !== 'string' && !Types.ObjectId.isValid(author)) throw 'Author should be a string or a valid ObjectId'
+        //if (typeof author !== 'string' && !Types.ObjectId.isValid(author)) throw 'Author should be a string or a valid ObjectId'
         if (typeof videoLink !== 'string') throw  'Video link should be a string'
 
-        const newProject = await createProjectInDB(
+        const project = await createProjectInDB(
             title,
             description,
             branch,
@@ -43,10 +43,10 @@ export const createProject = async (req, res) => {
         );
 
         //log before sending the response
-        console.log(newProject);
+        //console.log(project);
 
         //res.status(201).json(newProject);
-        res.render('show-project', {newProject: newProject.toObject()})
+        res.render('show-project', {project: project.toObject()})
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -165,7 +165,7 @@ export const getProjectById = async (req, res) => {
         if(!projectId) throw "Please provide a valid id";
         if(typeof projectId !== 'string' || !Types.ObjectId.isValid(projectId)) throw "Please provide a valid id"
 
-        const project = await getProjectForId(projectId);
+        const { project, likesCount, dislikesCount } = await getProjectForId(projectId);
 
         if (!project) {
             return res.status(404).json({ error: "Project not found" });
@@ -173,8 +173,10 @@ export const getProjectById = async (req, res) => {
 
         const user = req.user;
         const isAdmin = user.role === 'admin';
-
+        //console.log(project)
         res.render("show-project", {
+            likesCount,
+            dislikesCount,
             project: project.toObject(),
             user: user,
             isAdmin: isAdmin
@@ -281,7 +283,8 @@ export const sortProjects = async (req, res) => {
 // }
 
 export const like = async (req, res) => {
-    const { userId, projectId } = req.body;
+    const projectId  = req.params.id;
+    const userId = req.user.id;
     
     if(!userId) throw "Please provide the userId";
     if(userId.trim() === "") throw "userId cannot be just white spaces";
@@ -333,7 +336,8 @@ export const like = async (req, res) => {
 
 // Controller function for handling the request and response
 export const dislike = async (req, res) => {
-    const { userId, projectId } = req.body;
+    const projectId  = req.params.id;
+    const userId = req.user.id;
 
     try {
         const message = await dislikeProject(userId, projectId);

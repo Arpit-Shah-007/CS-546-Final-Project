@@ -1,5 +1,6 @@
 import { userData } from "../data/index.js";
 import { Types } from "mongoose";
+import { like } from "./project.controller.js";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -22,10 +23,12 @@ export const getUserById = async (req, res) => {
     if (!Types.ObjectId.isValid(id)) {
       throw "Please enter a valid string";
     }
-    const user = await userData.getUserById(id);
+    const {user, projects, likesCount, dislikesCount} = await userData.getUserById(id);
     //res.json(user);
+    //console.log(user)
+    console.log(projects[0])
 
-    res.render('profile', user);
+    res.render('profile', {user, projects, likesCount, dislikesCount});
   } catch (e) {
     res.status(404).json({ error: e });
   }

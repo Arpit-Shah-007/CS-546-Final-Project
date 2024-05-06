@@ -24,7 +24,7 @@
             <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <div class="dropdown-menu dropdown-menu-left">
-                <a class="dropdown-item" onclick="navigate('/profile')">{{user.id}}</a>
+                <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')">Profile</a>
                 <a class="dropdown-item" onclick="logOut()">Log Out</a>
             </div>
         </div>
@@ -33,17 +33,18 @@
 </nav>
 </div>
 <div class="container mt-10 ">
+    <div id="error-message" class="text-danger"></div>
     <div class="row justify-content-around ">
         {{#each projects}}
-        <div class="card lg:card-side bg-base-100 shadow-xl mb-4" style="max-width: 800px;">
-            <figure><video controls style="max-width: 100%; max-height: 400px;">
-                    <source src="../public/uploads/1714886936007-484170.mp4" type="video/mp4">
+        <div class="card lg:card-side bg-base-100 shadow-xl mb-4" style="width: 600px;">
+            <figure><video controls style="width: 350px; height: 300px;">
+                    <source src="{{this.videoLink}}" type="video/mp4">
                 </video></figure>
-            <div class="card-body">
-                <h2 class="card-title">{{title}}</h2>
+            <div class="card-body" style="width: 200px; height: 300px;">
+                <h2 class="card-title">{{this.title}}</h2>
                 <p>Click the button to se detailed project.</p>
             <div class="card-actions justify-end">
-            <button class="btn btn-primary">Expand</button>
+                <button class="btn btn-primary" onclick="expandProject('{{this._id}}')">Expand</button>
             </div>
             </div>
         </div>
@@ -51,86 +52,48 @@
     </div>
 </div>
 
-{{!-- <div class="container mt-10 ">
-    <div class="row justify-content-around ">
-        <div class="card lg:card-side bg-base-100 shadow-xl" style="max-width: 800px;">
-            <figure><video controls style="max-width: 100%; max-height: 400px;">
-                    <source src="../public/uploads/1714886936007-484170.mp4" type="video/mp4">
-                </video></figure>
-            <div class="card-body">
-                <h2 class="card-title">New album is released!</h2>
-                <p>Click the button to listen on Spotiwhy app.</p>
-            <div class="card-actions justify-end">
-            <button class="btn btn-primary">Listen</button>
-            </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="container mt-10 ">
-    <div class="row justify-content-around ">
-        <div class="card lg:card-side bg-base-100 shadow-xl" style="max-width: 800px;">
-            <figure><video controls style="max-width: 100%; max-height: 400px;">
-                    <source src="../public/uploads/1714886936007-484170.mp4" type="video/mp4">
-                </video></figure>
-            <div class="card-body">
-                <h2 class="card-title">New album is released!</h2>
-                <p>Click the button to listen on Spotiwhy app.</p>
-            <div class="card-actions justify-end">
-            <button class="btn btn-primary">Listen</button>
-            </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<div class="container mt-10 ">
-    <div class="row justify-content-around ">
-        <div class="card lg:card-side bg-base-100 shadow-xl" style="max-width: 800px;">
-            <figure><video controls style="max-width: 100%; max-height: 400px;">
-                    <source src="../public/uploads/1714886936007-484170.mp4" type="video/mp4">
-                </video></figure>
-            <div class="card-body">
-                <h2 class="card-title">New album is released!</h2>
-                <p>Click the button to listen on Spotiwhy app.</p>
-            <div class="card-actions justify-end">
-            <button class="btn btn-primary">Listen</button>
-            </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<div class="container mt-10 ">
-    <div class="row justify-content-around ">
-        <div class="card lg:card-side bg-base-100 shadow-xl" style="max-width: 800px;">
-            <figure><video controls style="max-width: 100%; max-height: 400px;">
-                    <source src="../public/uploads/1714886936007-484170.mp4" type="video/mp4">
-                </video></figure>
-            <div class="card-body">
-                <h2 class="card-title">New album is released!</h2>
-                <p>Click the button to listen on Spotiwhy app.</p>
-            <div class="card-actions justify-end">
-            <button class="btn btn-primary">Listen</button>
-            </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-
-
 <script>
     function navigate(route) {
     window.location.href = route;
 }
 
 function logOut(){
-    window.location.href = "http://localhost:3000/auth/logout";
+    fetch('http://localhost:3000/auth/logout', {
+        method: 'GET'
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = `/`; 
+        } else {
+            console.error('Failed to logout');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
+
+function expandProject(projectId) {
+  // Clear any existing error message
+  document.getElementById('error-message').textContent = '';
+
+  fetch(`/project/${projectId}`, {
+    method: 'GET'
+  })
+  .then(response => {
+    if (response.ok) {
+      // Handle the response, e.g., redirect to the project details page
+      window.location.href = `/project/${projectId}`;
+    } else {
+      // Display the error message
+      document.getElementById('error-message').textContent = 'Failed to fetch project details';
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    // Display the error message
+    document.getElementById('error-message').textContent = 'An error occurred while fetching project details';
+  });
+}
+
 </script>

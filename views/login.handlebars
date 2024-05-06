@@ -62,9 +62,9 @@
 
 <script>
     $(document).ready(function () {
-    // Add submit event listener to the form
+    // submit event listener
     $('#loginForm').submit(function (event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
         
         // Call the login function
         login();
@@ -75,27 +75,15 @@ function login() {
     const email = $('#form2Example11').val();
     const password = $('#form2Example22').val();
 
-    // Prepare the data to be sent in the request body
+    
     const requestBody = JSON.stringify({email, password});
 
-    // Make the POST request
+    // POST request
     $.ajax({
         url: 'http://localhost:3000/auth/login',
         type: 'POST',
         contentType: 'application/json',
         data: requestBody,
-        success: function (response) {
-            // Check if the response is redirected
-            if (response.redirected) {
-                // Redirect to the redirected URL
-                window.location.href = response.url;
-            } else {
-                // Handle successful login without redirection
-                console.log('Login successful');
-                // You can optionally redirect the user to another page here
-                // window.location.href = '/some-other-page';
-            }
-        },
         error: function (xhr, status, error) {
             // Handle errors
             console.error('There was a problem with the login:', error);

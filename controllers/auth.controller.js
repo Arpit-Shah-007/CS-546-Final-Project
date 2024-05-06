@@ -109,7 +109,8 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email }  = req.body;
+    const { password } = req.body;
 
     if (!email) {
       throw "Email is required";
@@ -141,7 +142,10 @@ export const login = async (req, res) => {
     res.cookie("token", token);
     // console.log(token)
     // res.status(200).json(token)
-    res.redirect("http://localhost:3000/home");
+    res.redirect("/", {
+      title: "Home Page",
+      
+    });
   } catch (error) {
     res.status(400).render("login", {
       title: "Login",

@@ -11,14 +11,14 @@ export const createProjectInDB = async (title, description, branch, subject, aut
     if (!description || description.trim() === "") throw  'Please provide a valid description'
     if (!branch || branch.trim() === "") throw  'Please provide a valid branch'
     if (!subject || subject.trim() === "") throw  'Please provide a valid subject'
-    if (!author || author.trim() === "") throw  'Please provide a valid author'
+    //if (!author || author.trim() === "") throw  'Please provide a valid author'
     if (!videoLink || videoLink.trim() === "") throw 'Video link must be provided'
 
     if (typeof title !== 'string') throw  'Title should be a string'
     if (typeof description !== 'string') throw  'Description should be a string'
     if (typeof branch !== 'string') throw  'Branch should be a string'
     if (typeof subject !== 'string') throw  'Subject should be a string'
-    if (typeof author !== 'string' && !(author instanceof mongoose.Types.ObjectId)) throw  'Author should be a string or a valid ObjectId'   
+    //if (typeof author !== 'string' && !Types.ObjectId.isValid(author)) throw  'Author should be a string or a valid ObjectId'   
     if (typeof videoLink !== 'string') throw  'Video link should be a string'
 
     // Create the project in the database
@@ -87,27 +87,32 @@ export const updateProjectInDB = async (projectId, title, description, branch, s
 };
 
 export const getProjectForId = async (id) => {
-    if(!id) throw "Please provide the id";
-    if(id.trim() === "") throw "Id cannot be just white spaces";
-    if(typeof id !== 'string' && !Types.ObjectId.isValid(id)) throw "Id should be a valid ObjectId"
-
+    if (!id) throw "Please provide the id";
+    if (id.trim() === "") throw "Id cannot be just white spaces";
+    if (typeof id !== 'string' && !Types.ObjectId.isValid(id))
+      throw "Id should be a valid ObjectId";
+  
     try {
-        const project = await Project.findById(id)
+      const project = await Project.findById(id)
         .populate({
-            path: 'comments',
-            populate: {
-                path: 'userId',
-                select: 'firstName lastName'
-            }
+          path: 'comments',
+          populate: {
+            path: 'userId',
+            model: 'User',
+            select: 'firstName lastName'
+          }
         })
         .populate('author', 'firstName lastName profilePic');
-        if(!project) throw "Project not found with the provided id"
 
-        return project;
+        const likesCount = project.likes.length;
+        const dislikesCount = project.dislikes.length;
+  
+      if (!project) throw "Project not found with the provided id";
+      return { project, likesCount, dislikesCount };
     } catch (error) {
-        throw error;
+      throw error;
     }
-}
+  }
 
 export const deleteProjectForId = async (id) => {
     if(!id) throw "Please provide the id";
@@ -185,6 +190,12 @@ export const likeProject = async (userId, projectId) => {
             throw new Error("Project not found");
         }
 
+        //console.log(project)
+        if(project.author.toString() === userId){
+            //console.log("same")
+            throw "Cannot like your own post"
+        }
+
         const userDislikedIndex = project.dislikes.indexOf(userId);
 
         if (project.likes.includes(userId)) {
@@ -198,6 +209,7 @@ export const likeProject = async (userId, projectId) => {
 
         project.likes.push(userId);
         await project.save();
+        //console.log(project)
 
         return "Post liked successfully";
     } catch (error) {
@@ -222,6 +234,11 @@ export const dislikeProject = async (userId, projectId) => {
 
         if (!project) {
             throw new Error("Project not found");
+        }
+
+        if(project.author.toString() === userId){
+            //console.log("same")
+            throw "Cannot dislike your own post"
         }
 
         const userLikedIndex = project.likes.indexOf(userId);

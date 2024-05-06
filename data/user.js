@@ -163,23 +163,26 @@ export const getUserById = async (id) => {
     throw "Please enter a valid string";
   }
 
-  const user = await User.findById(id);
+  const user = await User.findById(id).lean();
   if (!user) {
     throw "User not found";
   }
 
-  const projects = await Project.find({author: id});
+  const projects = await Project.find({author: id}).lean();
+  //console.log(projects)
 
   // Calulating likes and dislikes
 
   const likesCount = projects.reduce((total,project) => total + project.likes.length, 0);
   const dislikesCount = projects.reduce((total,project) => total + project.dislikes.length, 0);
+  //console.log(likesCount)
+  //console.log(dislikesCount)
 
-  user.projects = projects;
-  user.likesCount = likesCount;
-  user.dislikesCount = dislikesCount;
+  // user.projects = projects;
+  // user.likesCount = likesCount;
+  // user.dislikesCount = dislikesCount;
   
-  return user;
+  return {user, projects, likesCount, dislikesCount};
 };
 
 export const getAllUsers = async () => {

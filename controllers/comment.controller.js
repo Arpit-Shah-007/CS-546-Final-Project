@@ -4,11 +4,15 @@ import { Types } from "mongoose";
 export const createComment = async (req, res) => {
   try {
     const content = req.body.content;
-    const userId = req.body.id;
-    const projectId = req.body.projectId;
+    const userId = req.user.id;
+    const projectId = req.params.id;
     if (!content || !userId || !projectId) {
       throw "All fields are required";
     }
+    content = content.trim();
+    userId = userId.trim();
+    projectId = projectId.trim();
+    
     if (
       typeof content !== "string" ||
       content.length === 0 ||

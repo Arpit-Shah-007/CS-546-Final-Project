@@ -26,6 +26,10 @@ const projectSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    codeLink: { 
+        type: String,
+        required: true
+    },
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

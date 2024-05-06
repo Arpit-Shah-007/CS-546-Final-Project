@@ -9,12 +9,11 @@ const reportSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
-  reasonSelections: [
-    {
+  reasonSelections: {
       type: String,
       required: true,
-    },
-  ],
+  },
+  
   date: {
     type: Date,
     default: Date.now,

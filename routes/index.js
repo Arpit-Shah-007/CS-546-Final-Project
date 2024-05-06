@@ -5,16 +5,16 @@ import commentRoutes from "./commentRoutes.js";
 import Project from "../models/projects.models.js";
 
 const constructorMethod = (app) => {
-  app.use("/", async (req, res) => {
-    const user = req.user;
-    const isAdmin = user.role === 'admin';
-
-    const projects = await Project.find().lean();
-    //console.log(projects);
-    res.render("dashboard", {
-      projects: projects,
-      user: user,
-      isAdmin: isAdmin});;
+  app.get("/", async (req, res) => {
+      const user = req.user;
+      const isAdmin = user.role === 'admin';
+  
+      const projects = await Project.find().lean();
+      //console.log(projects);
+      res.render("dashboard", {
+        projects,
+        user: user,
+        isAdmin: isAdmin});
   });
   app.use("/auth", authRoutes);
   app.use("/user", userRoutes);
