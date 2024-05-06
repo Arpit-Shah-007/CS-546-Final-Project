@@ -1,25 +1,99 @@
-<div class="container">
-    {{> navbar}}
-</div>
-<div class="container">
-    <div class="row justify-content-around ">
-        {{!-- <div class="col-6 col-md-4 border rounded filter-section">
-            <h3 class="mt-1 mb-2">Filter</h3>
-            <div class="row-3 ">
-                <button type="button" class="btn btn-primary mb-2">Primary</button>
-                <button type="button" class="btn btn-primary mb-2">Primary</button>
-                <button type="button" class="btn btn-primary mb-2">Primary</button>
-                <button type="button" class="btn btn-primary mb-2">Primary</button>
-                <button type="button" class="btn btn-primary mb-2">Primary</button>
-                <button type="button" class="btn btn-primary mb-2">Primary</button>
+<div class="container-fluid px-0">
+   <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
+    <a class="navbar-brand text-primary cursor-pointer" id=""
+        onclick="navigate('/')">PROJEX</a>
+    <form class="form-inline" id="search_form">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
+        <button class="btn btn-outline-primary " type="submit">Search</button>
+
+    </form>
+    <div>
+        {{#if isAdmin}}
+        <button type="button" class="btn btn-danger mr-10" 
+            title="Add Project" onclick="navigate('/reportList')">
+            Reports
+        </button>
+        {{/if}}
+        <button type="button" class="btn btn-outline-primary mr-10" 
+            title="Add Project" onclick="navigate('/create')">
+            Create Project
+        </button>
+        
+
+        <div class="btn-group mr-10     " id="cursor-pointer">
+            <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="dropdown-menu dropdown-menu-left">
+                <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')">Profile</a>
+                <a class="dropdown-item" onclick="logOut()">Log Out</a>
             </div>
-
-
-        </div> --}}
-
-        <div class="col-12 col-sm-6 col-md-8 col-md-offset-2 border rounded dashboard-showcase-sec" id="project_list">
-
         </div>
+    </div>
+
+</nav>
+</div>
+<div class="container mt-10 ">
+    <div id="error-message" class="text-danger"></div>
+    <div class="row justify-content-around ">
+        {{#each projects}}
+        <div class="card lg:card-side bg-base-100 shadow-xl mb-4" style="width: 600px;">
+            <figure><video controls style="width: 350px; height: 300px;">
+                    <source src="{{this.videoLink}}" type="video/mp4">
+                </video></figure>
+            <div class="card-body" style="width: 200px; height: 300px;">
+                <h2 class="card-title">{{this.title}}</h2>
+                <p>Click the button to se detailed project.</p>
+            <div class="card-actions justify-end">
+                <button class="btn btn-primary" onclick="expandProject('{{this._id}}')">Expand</button>
+            </div>
+            </div>
+        </div>
+        {{/each}}
     </div>
 </div>
 
+<script>
+    function navigate(route) {
+    window.location.href = route;
+}
+
+function logOut(){
+    fetch('http://localhost:3000/auth/logout', {
+        method: 'GET'
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = `/`; 
+        } else {
+            console.error('Failed to logout');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function expandProject(projectId) {
+  // Clear any existing error message
+  document.getElementById('error-message').textContent = '';
+
+  fetch(`/project/${projectId}`, {
+    method: 'GET'
+  })
+  .then(response => {
+    if (response.ok) {
+      // Handle the response, e.g., redirect to the project details page
+      window.location.href = `/project/${projectId}`;
+    } else {
+      // Display the error message
+      document.getElementById('error-message').textContent = 'Failed to fetch project details';
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    // Display the error message
+    document.getElementById('error-message').textContent = 'An error occurred while fetching project details';
+  });
+}
+
+</script>

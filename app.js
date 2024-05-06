@@ -8,6 +8,8 @@ import jwt from "jsonwebtoken";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
+import Project from "./models/projects.models.js";
+
 
 const app = express();
 dotenv.config();
@@ -63,7 +65,7 @@ app.use((req, res, next) => {
 app.use("/auth/login", (req, res, next) => {
   if (req.method === "GET") {
     if (req.user) {
-      res.redirect("/home");
+      res.redirect("/");
     } else next();
   } else next();
 });
@@ -71,10 +73,27 @@ app.use("/auth/login", (req, res, next) => {
 app.use("/auth/register", (req, res, next) => {
   if (req.method === "GET") {
     if (req.user) {
-      res.redirect("/home");
+      res.redirect("/");
     } else next();
   } else next();
 });
+
+
+// app.get("/login", (req, res) => {
+//   res.render("login");
+// });
+// app.get("/userProfile", (req, res) => {
+//   res.render("profile");
+// });
+
+// app.get("/create", (req, res) => {
+//   res.render("create-project");
+// });
+
+// app.get("/show", (req, res) => {
+//   res.render("show-project");
+// });
+
 
 configRoutes(app);
 
@@ -83,3 +102,4 @@ app.listen(PORT, (req, res) => {
   connectToDB();
   console.log(`Your server is running on port ${PORT}`);
 });
+

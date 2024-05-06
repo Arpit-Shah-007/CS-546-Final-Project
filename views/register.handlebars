@@ -1,0 +1,44 @@
+<section class="container-auth forms">
+    <div class="form login">
+        <div class="form-content">
+            <header>Register</header>
+            <form class="auth-form" id="register_form" action="http://localhost:3000/auth/register" method="post">
+    <div class="field input-field">
+        <input type="text" placeholder="First Name" class="input" id="firstName" name="firstName">
+        <div class="error-message" id="firstNameError"></div>
+    </div>
+
+    <div class="field input-field">
+        <input type="text" placeholder="Last Name" class="input" id="lastName" name="lastName">
+        <div class="error-message" id="lastNameError"></div>
+    </div>
+
+    <div class="field input-field">
+        <input type="email" placeholder="Email" class="input" id="email" name="email">
+        <div class="error-message" id="emailError"></div>
+    </div>
+
+    <div class="field input-field">
+        <input type="password" placeholder="Password" class="password" id="password" name="password">
+        <i class='bx bx-hide eye-icon'></i>
+        <div class="error-message" id="passwordError"></div>
+    </div>
+    <div class="field input-field">
+        <input type="password" placeholder="Confirm Password" class="password" id="confirmPassword" name="confirmPassword">
+        <i class='bx bx-hide eye-icon'></i>
+        <div class="error-message" id="confirmPasswordError"></div>
+    </div>
+
+    <div class="field button-field">
+        <button type="submit">Register</button>
+    </div>
+</form>
+
+            <div class="text-center mt-10">
+                <a href="/login">Already have an account?</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+

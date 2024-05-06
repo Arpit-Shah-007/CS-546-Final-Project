@@ -5,17 +5,21 @@ export const createComment = async (req, res) => {
   try {
     const content = req.body.content;
     const userId = req.user.id;
-    const projectId = req.params.projectId;
+    const projectId = req.params.id;
     if (!content || !userId || !projectId) {
       throw "All fields are required";
     }
+    content = content.trim();
+    userId = userId.trim();
+    projectId = projectId.trim();
+    
     if (
       typeof content !== "string" ||
       content.length === 0 ||
       typeof userId !== "string" ||
       userId.length === 0 ||
       typeof projectId !== "string" ||
-      postId.length === 0
+      projectId.length === 0
     ) {
       throw "Please enter a valid string";
     }
@@ -29,7 +33,7 @@ export const createComment = async (req, res) => {
     );
     res.json(comment);
   } catch (e) {
-    res.status(400).json({ error: e });
+    res.status(400).json({ error: e.message });
   }
 };
 
