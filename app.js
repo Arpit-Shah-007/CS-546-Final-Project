@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import Project from "./models/projects.models.js";
 
+
 const app = express();
 dotenv.config();
 
@@ -77,6 +78,7 @@ app.use("/auth/register", (req, res, next) => {
   } else next();
 });
 
+
 // app.get("/login", (req, res) => {
 //   res.render("login");
 // });
@@ -92,6 +94,7 @@ app.use("/auth/register", (req, res, next) => {
 //   res.render("show-project");
 // });
 
+
 configRoutes(app);
 
 const PORT = process.env.PORT || 3000;
@@ -99,13 +102,4 @@ app.listen(PORT, (req, res) => {
   connectToDB();
   console.log(`Your server is running on port ${PORT}`);
 });
-
-
-
-
-
-
-
-
-
 
