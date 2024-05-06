@@ -99,7 +99,8 @@ export const register = async (req, res) => {
     }
     res.redirect("/auth/login");
   } catch (error) {
-    res.status(400).json({error: error});
+    // res.status(400).json({error: error});
+    res.render("register",{title:"Register",hasErrors:true,error:error})
   }
 };
 

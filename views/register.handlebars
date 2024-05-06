@@ -13,7 +13,8 @@
                     </div>
 
 
-                  <form id="register-form" class="register-form">
+                  <form id="register-form" class="register-form" action="/auth/register" method="POST">
+                    <br>
 
                     <div data-mdb-input-init class="form-outline mb-4">
                       <label class="form-label" for="firstName">FirstName</label>
@@ -51,6 +52,9 @@
                         Register</button>
                     </div>
                   </form>
+                  {{#if hasError}}
+                  <div>{{error}}</div>
+                  {{/if}}
                   <div id="error-block" class="error-block text-danger" hidden></div>
                   <div class="d-flex align-items-center justify-content-center pb-4">
                     <p class="mb-0 mr-4 me-2">Already have an account?</p>
@@ -151,8 +155,5 @@
       });
     }
   });
-  
-
-
 
 </script>

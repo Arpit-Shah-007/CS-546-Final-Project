@@ -35,7 +35,7 @@
 <div class="container-fluid d-flex justify-content-center align-items-center">
 
     <div class="card w-50 bg-base-100 shadow-xl mt-10 mb-20">
-        <form id="createProjectForm"  enctype="multipart/form-data">
+        <form id="createProjectForm" action="http://localhost:3000/project" method="POST" enctype="multipart/form-data">
             <div class="card-body">
                 <div class="form-group">
                     <label for="title">Title</label>
@@ -216,44 +216,5 @@
             });
         }
     });
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-    let createProjectForm = document.getElementById('createProjectForm');
-    let errorDiv = document.getElementById('error-block');
-
-    if (createProjectForm) {
-        createProjectForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            errorDiv.innerHTML = ""; // Clear previous error messages
-            errorDiv.hidden = true; // Hide error div initially
-            
-            try {
-                const formData = new FormData(createProjectForm);
-                const response = await fetch('http://localhost:3000/project', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    // Handle successful project creation
-                    // For example, redirect to a success page
-                    //window.location.href = '/success';
-                } else {
-                    const error = await response.json();
-                    console.error('Error:', error.error);
-                    // Display error message to the user
-                    errorDiv.innerHTML = `<p>${error.error}</p>`;
-                    errorDiv.hidden = false; // Show error div
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                // Handle network or unexpected errors
-                errorDiv.innerHTML = `<p>An unexpected error occurred. Please try again later.</p>`;
-                errorDiv.hidden = false; // Show error div
-            }
-        });
-    }
-});
 
 </script>

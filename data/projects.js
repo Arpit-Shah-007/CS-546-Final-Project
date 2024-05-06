@@ -26,6 +26,11 @@ export const createProjectInDB = async (title, description, branch, subject, aut
     if (typeof author !== 'string' && !Types.ObjectId.isValid(author)) throw  'Author should be a string or a valid ObjectId'   
     if (typeof videoLink !== 'string') throw  'Video link should be a string'
 
+    const existingProject = await Project.findOne({ title: title.trim() });
+    if (existingProject) {
+        throw 'A project with the same title already exists';
+    }
+
     // Create the project in the database
     const newProject = await Project.create({
         title,
@@ -211,7 +216,7 @@ export const likeProject = async (userId, projectId) => {
         //console.log(project)
         if(project.author.toString() === userId){
             
-            throw "Cannot like your own post"
+            throw new Error("Cannot like your own post")
         }
         console.log("object")
         const userDislikedIndex = project.dislikes.indexOf(userId);
@@ -256,7 +261,7 @@ export const dislikeProject = async (userId, projectId) => {
 
         if(project.author.toString() === userId){
             //console.log("same")
-            throw "Cannot dislike your own post"
+            throw new Error("Cannot dislike your own post")
         }
 
         const userLikedIndex = project.likes.indexOf(userId);
