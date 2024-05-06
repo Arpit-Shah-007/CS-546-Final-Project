@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import Report from "../models/report.models.js";
+import Project from '../models/projects.models.js';
 
 export const createNewReport = async (userId, projectId, reason) => {
     
@@ -15,6 +16,16 @@ export const createNewReport = async (userId, projectId, reason) => {
 
         if (!reason || typeof reason !== 'string') {
             throw ("Invalid reason");
+        }
+
+        const project = await Project.findById(projectId);
+        if (!project) {
+            throw "Project not found";
+        }
+        //console.log("here")
+        if (project.author.equals(userId)) {
+            //console.log("equal")
+            throw "You cannot report your own project";
         }
 
         const existingReport = await Report.findOne({ reportedBy: userId, projectId: projectId });
@@ -33,7 +44,6 @@ export const createNewReport = async (userId, projectId, reason) => {
         if (!result) {
             throw "Could not create report";
         }
-
         return result;
     } catch (error) {
         throw error;
@@ -65,11 +75,11 @@ export const getReportbyId = async (id) => {
 
 export const deleteReportbyId = async (id) => {
     if (!id) {
-        throw new Error("Id must be provided");
+        throw "Id must be provided";
     }
 
     if (!Types.ObjectId.isValid(id)) {
-        throw new Error("Id is not a valid ObjectId");
+        throw "Id is not a valid ObjectId";
     }
 
     try {
@@ -78,6 +88,7 @@ export const deleteReportbyId = async (id) => {
         if (!report) {
             throw new Error("Cannot find a report");
         }
+        await Report.findByIdAndDelete(id);
 
         return report;
     } catch (error) {

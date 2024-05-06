@@ -2,18 +2,19 @@
    <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
     <a class="navbar-brand text-primary cursor-pointer" id=""
         onclick="navigate('/')">PROJEX</a>
-    <form class="form-inline" id="search_form">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
+    <form class="form-inline" id="search_form" action="/project/search" method="GET">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="searchParam">
         <button class="btn btn-outline-primary " type="submit">Search</button>
-
     </form>
     <div>
+        {{#if isAdmin}}
         <button type="button" class="btn btn-danger mr-10" 
             title="Add Project" onclick="navigate('/reportList')">
             Reports
         </button>
+        {{/if}}
         <button type="button" class="btn btn-outline-primary mr-10" 
-            title="Add Project" onclick="navigate('/create')">
+            title="Add Project" onclick="navigate('/project/create')">
             Create Project
         </button>
         
@@ -22,7 +23,7 @@
             <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <div class="dropdown-menu dropdown-menu-left">
-                <a class="dropdown-item" onclick="navigate('/profile')">Profile</a>
+                <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')">Profile</a>
                 <a class="dropdown-item" onclick="logOut()">Log Out</a>
             </div>
         </div>
@@ -73,4 +74,25 @@
         console.log('submitting')
         // Additional logic can be added here if needed
     });
+
+        function navigate(route) {
+    window.location.href = route;
+}
+
+function logOut(){
+    fetch('http://localhost:3000/auth/logout', {
+        method: 'GET'
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = `/`; 
+        } else {
+            console.error('Failed to logout');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 </script>

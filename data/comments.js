@@ -26,6 +26,11 @@ export const createComment = async (content, userId, projectId) => {
     throw "Please enter a valid string";
   }
 
+  const existingComment = await Comment.findOne({ userId, projectId });
+  if (existingComment) {
+    throw "You have already commented on this project";
+  }
+
   const newComment = new Comment({
     content,
     userId,
@@ -33,7 +38,7 @@ export const createComment = async (content, userId, projectId) => {
   });
 
   await newComment.save();
-  console.log(newComment)
+  //console.log(newComment)
 
   await Project.findByIdAndUpdate(projectId, { $push: { comments: newComment._id } });
   return newComment;

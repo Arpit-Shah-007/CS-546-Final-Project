@@ -3,18 +3,18 @@ import { Types } from "mongoose";
 
 export const createComment = async (req, res) => {
   try {
-    console.log("here")
+    //console.log("here")
     const content = req.body.content;
-    console.log(content)
+    //console.log(content)
     const userId = req.user.id;
-    console.log(userId)
+    //console.log(userId)
     const projectId = req.params.id;
-    console.log(projectId)
+    //console.log(projectId)
     if (!content || !userId || !projectId) {
       throw "All fields are required";
     }
-    console.log(userId)
-    console.log(projectId)
+    // console.log(userId)
+    // console.log(projectId)
     if (
       typeof content !== "string" ||
       content.length === 0 ||
@@ -35,7 +35,7 @@ export const createComment = async (req, res) => {
     );
     res.json(comment);
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: e });
   }
 };
 

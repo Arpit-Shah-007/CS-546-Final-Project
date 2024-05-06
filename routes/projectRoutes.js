@@ -6,9 +6,19 @@ const router = express.Router();
 
 // To render Create Project Page
 router.get("/create", (req, res) => {
-    res.render("createProject"); 
-});
+
+    const user = req.user;
+    const isAdmin = user.role === 'admin';
+    res.render("create-project", {
+      user: user,
+      isAdmin: isAdmin
+  });
+})
 router.post("/", upload.single('video'), createProject);
+
+// Search and Sort
+router.get("/search", searchProjects);
+router.get('/sort', sortProjects);
 
 // To update Project
 router.get("/update/:id", renderUpdate);
@@ -21,9 +31,7 @@ router.get("/:id", getProjectById)
 // To delete
 router.delete("/:id", deleteProject);
 
-// Search and Sort
-router.get("/search", searchProjects);
-router.get('/sort', sortProjects);
+
 
 // Like / Dislike 
 router.post('/:id/like', like);

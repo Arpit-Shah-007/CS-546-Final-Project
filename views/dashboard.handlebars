@@ -1,11 +1,10 @@
 <div class="container-fluid px-0">
-   <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
+   <nav class="navbar  navbar-dark bg-dark justify-content-between py-3">
     <a class="navbar-brand text-primary cursor-pointer" id=""
         onclick="navigate('/')">PROJEX</a>
-    <form class="form-inline" id="search_form">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
+    <form class="form-inline" id="search_form" action="/project/search" method="GET">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="searchParam">
         <button class="btn btn-outline-primary " type="submit">Search</button>
-
     </form>
     <div>
         {{#if isAdmin}}
@@ -15,7 +14,7 @@
         </button>
         {{/if}}
         <button type="button" class="btn btn-outline-primary mr-10" 
-            title="Add Project" onclick="navigate('/create')">
+            title="Add Project" onclick="navigate('/project/create')">
             Create Project
         </button>
         
@@ -32,13 +31,55 @@
 
 </nav>
 </div>
+
 <div class="container mt-10 ">
+    <div class="container">
+        <div class="row">
+            <div class=" col text-center mb-3"> <!-- Add this div to align the dropdown to the right -->
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Filter
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/project/search?searchParam=Data Visualization">Computer Science</a></li>
+                <li><a class="dropdown-item" href="#">Management</a></li>
+                <li><a class="dropdown-item" href="#">Physics</a></li>
+                <li><a class="dropdown-item" href="#">Mechanical Engineering</a></li>
+                <li><a class="dropdown-item" href="#">Economics</a></li>
+                <li><a class="dropdown-item" href="#">Web Development</a></li>
+                <li><a class="dropdown-item" href="#">Machine Learning</a></li>
+                <li><a class="dropdown-item" href="#">Quantitative</a></li>
+                <li><a class="dropdown-item" href="#">Business</a></li>
+                <li><a class="dropdown-item" href="#">Artificial Intelligence</a></li>
+                <li><a class="dropdown-item" href="#">Datastructure</a></li>
+                
+            </ul>
+        </div>
+    </div>
+    <div class=" col text-center mb-3"> <!-- Add this div to align the dropdown to the right -->
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                SORT
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/project/sort?sortBy=date">Date</a></li>
+                <li><a class="dropdown-item" href="/project/sort?sortBy=likes">Likes</a></li>
+                <li><a class="dropdown-item" href="/project/sort?sortBy=dislikes">Dislikes</a></li>
+            </ul>
+        </div>
+    </div>
+        </div>
+        
+    
+    </div>
+    
     <div id="error-message" class="text-danger"></div>
+     {{#if projects.length}}
     <div class="row justify-content-around ">
         {{#each projects}}
         <div class="card lg:card-side bg-base-100 shadow-xl mb-4" style="width: 600px;">
             <figure><video controls style="width: 350px; height: 300px;">
-                    <source src="{{this.videoLink}}" type="video/mp4">
+                    <source src="/{{this.videoLink}}" type="video/mp4">
                 </video></figure>
             <div class="card-body" style="width: 200px; height: 300px;">
                 <h2 class="card-title">{{this.title}}</h2>
@@ -50,6 +91,11 @@
         </div>
         {{/each}}
     </div>
+     {{else}}
+    <div id="error-message" class="text-danger text-center">
+        <p class="font-bold text-2xl">No projects found.</p>
+    </div>
+      {{/if}}
 </div>
 
 <script>

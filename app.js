@@ -85,9 +85,7 @@ app.use("/auth/register", (req, res, next) => {
 //   res.render("profile");
 // });
 
-app.get("/create", (req, res) => {
-  res.render("create-project");
-});
+
 
 // app.get("/show", (req, res) => {
 //   res.render("show-project");

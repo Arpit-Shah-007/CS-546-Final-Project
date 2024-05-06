@@ -2,6 +2,7 @@ import authRoutes from "./authRoutes.js";
 import userRoutes from "./userRoutes.js";
 import projectRoutes from "./projectRoutes.js";
 import commentRoutes from "./commentRoutes.js";
+import reportRoutes from "./reportRoutes.js"
 import Project from "../models/projects.models.js";
 
 const constructorMethod = (app) => {
@@ -16,6 +17,16 @@ const constructorMethod = (app) => {
         user: user,
         isAdmin: isAdmin});
   });
+  app.get("/create", (req, res) => {
+
+      const user = req.user;
+      const isAdmin = user.role === 'admin';
+    res.render("create-project", {
+        user: user,
+        isAdmin: isAdmin
+    });
+  })
+  app.use("/report", reportRoutes);
   app.use("/auth", authRoutes);
   app.use("/user", userRoutes);
   app.use("/project", projectRoutes);

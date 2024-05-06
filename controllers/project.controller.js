@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { createProjectInDB, deleteProjectForId, dislikeProject, findProjectForSearch, getProjectForId, likeProject, updateProjectInDB } from "../data/projects.js";
 import Project from "../models/projects.models.js";
+import { ObjectId } from "mongodb";
 
 // Controller function to create project
 export const createProject = async (req, res) => {
@@ -140,10 +141,10 @@ export const updateProject = async (req, res) => {
 export const deleteProject = async (req, res) => {
     try {
         const projectId = req.params.id;
-
+        // console.log("project")
         if(!projectId) throw "Please provide a valid id";
         if(typeof projectId !== 'string' || !Types.ObjectId.isValid(projectId)) throw "Please provide a valid id"
-
+        
         const deletedProject = await deleteProjectForId(projectId);
 
         if (!deletedProject) {
@@ -152,6 +153,7 @@ export const deleteProject = async (req, res) => {
 
         res.status(200).json({ message: "Project deleted successfully" });
     } catch (error) {
+        //console.log(error)
         res.status(400).json({ error: error.message });
     }
 };
@@ -182,15 +184,16 @@ export const getProjectById = async (req, res) => {
             return res.status(404).json({ error: "Project not found" });
         }
         const user = req.user;
-        project.current_user = req.user;
-        const id = user.id.toString()
-        console.log(user)
+        //project.current_user = req.user;
+        const id = new ObjectId(user.id)
+        //console.log(user)
         const isAdmin = user.role === 'admin';
         
-        console.log(project)
+        //console.log(project)
         res.render("show-project", {
             likesCount,
             dislikesCount,
+            id,
             user,
             project: project.toObject(),
             isAdmin: isAdmin
@@ -202,15 +205,31 @@ export const getProjectById = async (req, res) => {
 
 // Controller function to search projects based on criteria
 export const searchProjects = async (req, res) => {
-    const {searchParam} = req.query;
-    //console.log(searchParam)
-
-    if(!searchParam) throw "Please provide the search parameter";
-    if(typeof searchParam !== 'string') throw "Search Parameter must be a string";
-
-    const projects = await findProjectForSearch(searchParam);
-
-    res.status(200).json(projects)
+    try {
+        const { searchParam } = req.query;
+        console.log(searchParam)
+        //console.log(searchParam)
+        const projects = await findProjectForSearch(searchParam);
+        //console.log(projects)
+        if (projects.length === 0) {
+            // If no projects were found, render the dashboard with a message
+            res.render('dashboard', { 
+                message: 'No projects found matching the search criteria.',
+                projects: [],
+            });
+        } else {
+            // If projects were found, render the dashboard with the projects
+            const user = req.user
+            const isAdmin = user.role === 'admin';
+            res.render('dashboard', { 
+                projects,
+                user,
+                isAdmin,
+            });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 
 // Controller function to filter projects based on criteria
@@ -259,7 +278,13 @@ export const sortProjects = async (req, res) => {
             },
             { $sort: sortCriteria }
         ]);
-        res.status(200).json(projects);
+        const user =  req.user
+        const isAdmin = user.role === 'admin';
+            res.render('dashboard', { 
+                projects,
+                user,
+                isAdmin,
+            });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

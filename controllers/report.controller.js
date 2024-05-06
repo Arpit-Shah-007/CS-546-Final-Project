@@ -1,6 +1,7 @@
 import xss from "xss";
 import { createNewReport, deleteReportbyId, getReportbyId } from "../data/reports.js";
 import Report from "../models/report.models.js";
+import { Types } from "mongoose";
 
 
 // Controller function to create a new report
@@ -8,11 +9,11 @@ export const createReport = async (req, res) => {
    try {
 
     //const userId = req.user.id;
-    const { projectId } = xss(req.body);
-    const { reason } = xss(req.body);
-    const { userId } = req.body;
+    const  projectId  = req.params.id;
+    const  reason  = req.body.reason;
+    const  userId  = req.user.id;
     
-
+    //console.log("object")
     if (!userId || typeof userId !== 'string' || !Types.ObjectId.isValid(userId)) {
         throw ("Invalid user ID");
     }
@@ -25,21 +26,27 @@ export const createReport = async (req, res) => {
         throw ("Invalid reason");
     }
 
-    const result = await createNewReport(userId, projectId, reasons);
-    console.log("created")
-    res.status(200).json(result)
+    const result = await createNewReport(userId, projectId, reason);
+    // console.log(result)
+    // console.log("created")
+    // res.status(200).json(result)
+    res.status(200).json({message: "Report created"})
     // res.render();
     // return
    } catch (error) {
-    res.status(500).json({Error: error})
+    //console.log(error)
+    res.status(500).json({error: error})
    }
 };
 
 // Controller function to fetch all reports
 export const getAllReports = async (req, res) => {
     try {
-        const reports = await Report.find({});
-        res.status(200).json(reports);
+        const reports = await Report.find({}).populate('reportedBy').lean();
+        //console.log(reports)
+        res.render('reportList',{
+            reports: reports
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -73,7 +80,7 @@ export const getReportById = async (req, res) => {
 export const deleteReportById = async (req, res) => {
     try {
         const id = req.params.id;
-        console.log(id)
+        //console.log(id)
 
         if (!id) {
             throw new Error("Id must be provided");
@@ -85,7 +92,7 @@ export const deleteReportById = async (req, res) => {
 
         const deletedReport = await deleteReportbyId(id);
 
-        console.log(deletedReport);
+        //console.log(deletedReport);
 
         res.status(200).json(deletedReport)
     } catch (error) {

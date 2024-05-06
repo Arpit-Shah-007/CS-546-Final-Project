@@ -1,24 +1,14 @@
 <div class="container-fluid px-0">
    <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
-    <a class="navbar-brand text-primary cursor-pointer" id=""
-        onclick="navigate('/')">PROJEX</a>
-    <form class="form-inline" id="search_form">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
+    <a class="navbar-brand text-primary cursor-pointer" id="" onclick="navigate('/')">PROJEX</a>
+    <form class="form-inline" id="search_form" action="/project/search" method="GET">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="searchParam">
         <button class="btn btn-outline-primary " type="submit">Search</button>
-
     </form>
     <div>
-        <button type="button" class="btn btn-danger mr-10" 
-            title="Add Project" onclick="navigate('/reportList')">
-            Reports
-        </button>
-        <button type="button" class="btn btn-outline-primary mr-10" 
-            title="Add Project" onclick="navigate('/create')">
-            Create Project
-        </button>
-        
-
-        <div class="btn-group mr-10     " id="cursor-pointer">
+        <button type="button" class="btn btn-danger mr-10" title="Reports" onclick="navigate('/reportList')">Reports</button>
+        <button type="button" class="btn btn-outline-primary mr-10" title="Create Project" onclick="navigate('/create')">Create Project</button>
+        <div class="btn-group mr-10">
             <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <div class="dropdown-menu dropdown-menu-left">
@@ -27,44 +17,32 @@
             </div>
         </div>
     </div>
-
 </nav>
 </div>
+
 <div class="container">
     <div class="container d-flex p-5 border justify-content-around">
-        <div class="d-flex flex-column border rounded align-items-center justify-content-center">
-            <video class="video-upload-sec p-3" id="project_video" controls></video>
-        </div>
-
         <div class="w-75 p-3">
-            <div class="row align-items-top">
-                <div class="col-auto">
-                    <img class="avatar" src="/image/avatar2.png" alt="Avatar">
-                </div>
-                <div class="col px-0">
-                    <h4 class="mb-0" id="author_name"></h4>
-                    <p id="project_description">Description</p>
-                </div>
-
-            </div>
             <div>
-
                 <div class="d-flex flex-column justify-content-between border rounded  project-comment-sec mt-2">
-                    <h4 for="report" class="p-3"> Report Project </h4>
-                    <select name="report" class="form-control comment-sec" id="report" multiple>
-                        <option value="i just dont like it">i just dont like it </option>
-                        <option value="its spam">its spam</option>
-                        <option value="sexual activity">sexual activity</option>
-                        <option value="scam">scam</option>
-                        <option value="drugs">drugs</option>
-                    </select>
-
-                    <div class="d-flex justify-content-center m-3">
-                        <button type="button" class="btn btn-danger" id="add_report">Submit</button>
-                    </div>
+                    <h4 for="report" class="p-3">Report Project</h4>
+                    <form id="report_form">
+                        <div class="form-group">
+                            <label for="report_reason">Select Reason:</label>
+                            <select name="report_reason" class="form-control" id="report_reason">
+                                <option value="i just dont like it">I just don't like it</option>
+                                <option value="its spam">It's spam</option>
+                                <option value="sexual activity">Sexual activity</option>
+                                <option value="scam">Scam</option>
+                                <option value="drugs">Drugs</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-danger">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

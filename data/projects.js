@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import Project from "../models/projects.models.js";
 import User from "../models/user.model.js";
 import Comment from "../models/comments.models.js";
+import Report from "../models/report.models.js";
 
 
 export const createProjectInDB = async (title, description, branch, subject, author, link, resource, videoLink) => {
@@ -119,19 +120,31 @@ export const getProjectForId = async (id) => {
   }
 
 export const deleteProjectForId = async (id) => {
+    
     if(!id) throw "Please provide the id";
     if(id.trim() === "") throw "Id cannot be just white spaces";
     if(typeof id !== 'string' && !!Types.ObjectId.isValid(id)) throw "Id should be a valid ObjectId"
 
     try {
+        
         const project = await Project.findById(id).populate('comments');
         if(!project) throw "Project not found with the provided id";
-
+        
+        
         // deleting the comment from db
         await  Promise.all(project.comments.map(async comment => {
             await Comment.findByIdAndDelete(comment._id)
         }))
 
+         // Find all reports associated with the project
+        const reports = await Report.find({ projectId: id });
+
+        console.log(reports);
+        //Delete each report associated with the project
+        await Promise.all(reports.map(async report => {
+            await Report.findByIdAndDelete(report._id);
+        }));
+        
         //deleting the project
         const deletedProject = await Project.findByIdAndDelete(id);
         
@@ -165,7 +178,7 @@ export const findProjectForSearch = async (searchParam) =>{
         }).populate({
             path: 'author',
             select: 'firstName lastName'
-        });
+        }).lean();
 
         if(!projects) throw "Could not find any project with provided search parameter";
 
@@ -179,15 +192,15 @@ export const findProjectForSearch = async (searchParam) =>{
 
 
 export const likeProject = async (userId, projectId) => {
-    console.log("Data function")
+    
     if (!userId) throw "Please provide the userId";
     if (userId.trim() === "") throw "userId cannot be just white spaces";
     if (typeof userId !== 'string' && !Types.ObjectId.isValid(userId)) throw "userId should be a valid ObjectId";
-    console.log("1")
+    
     if (!projectId) throw "Please provide the projectId";
     if (projectId.trim() === "") throw "projectId cannot be just white spaces";
     if (typeof projectId !== 'string' && !Types.ObjectId.isValid(projectId)) throw "projectId should be a valid ObjectId";
-    console.log("2")
+    
     try {
         const project = await Project.findById(projectId);
         //console.log(project)
@@ -197,7 +210,7 @@ export const likeProject = async (userId, projectId) => {
 
         //console.log(project)
         if(project.author.toString() === userId){
-            console.log("same")
+            
             throw "Cannot like your own post"
         }
         console.log("object")
