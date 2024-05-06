@@ -27,12 +27,12 @@ export const register = async (req, res) => {
     if (!confirmPassword) {
       throw "ConfirmPassword is required";
     }
-    if (!profilePic) {
-      throw "ProfilePic is required";
-    }
-    if (!role) {
-      throw "Role is required";
-    }
+    // if (!profilePic) {
+    //   throw "ProfilePic is required";
+    // }
+    // if (!role) {
+    //   throw "Role is required";
+    // }
 
     if (
       typeof firstName !== "string" ||
@@ -57,7 +57,7 @@ export const register = async (req, res) => {
     ) {
       throw "Invalid email";
     }
-
+    console.log("3")
     if (
       typeof password !== "string" ||
       password.trim().length === 0 ||
@@ -70,17 +70,18 @@ export const register = async (req, res) => {
       throw "Passwords do not match";
     }
 
-    if (typeof role !== "string" || role.trim().length === 0) {
-      throw "Invalid role";
-    }
+    // if (typeof role !== "string" || role.trim().length === 0) {
+    //   throw "Invalid role";
+    // }
 
-    if (
-      role.trim().toLowerCase() !== "admin" &&
-      role.trim().toLowerCase() !== "user"
-    ) {
-      throw "Invalid role. It should be either admin or user";
-    }
-
+    // if (
+    //   role.trim().toLowerCase() !== "admin" &&
+    //   role.trim().toLowerCase() !== "user"
+    // ) {
+    //   throw "Invalid role. It should be either admin or user";
+    // }
+    const profilePic = "https://avatar.iran.liara.run/public"
+    const role = "user";
     const result = await userData.registerUser(
       firstName,
       lastName,
