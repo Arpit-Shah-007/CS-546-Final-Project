@@ -30,3 +30,15 @@
 //     throw "Error: invalid email";
 //   }
 // };
+
+
+
+
+import Handlebars from'handlebars'
+
+// Define the Handlebars helper function for equality comparison
+Handlebars.registerHelper('eq', function(arg1, arg2, options) {
+    return arg1 === arg2 ? options.inverse(this) : options.fn(this);
+});
+
+export default Handlebars;

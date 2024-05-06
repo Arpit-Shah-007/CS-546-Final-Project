@@ -1,5 +1,6 @@
 import Comment from "../models/comments.models.js";
 import { Types } from "mongoose";
+import Project from "../models/projects.models.js";
 
 export const createComment = async (content, userId, projectId) => {
   content = content.trim();
@@ -32,6 +33,9 @@ export const createComment = async (content, userId, projectId) => {
   });
 
   await newComment.save();
+  console.log(newComment)
+
+  await Project.findByIdAndUpdate(projectId, { $push: { comments: newComment._id } });
   return newComment;
 };
 

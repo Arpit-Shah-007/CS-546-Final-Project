@@ -26,9 +26,13 @@ const projectSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    codeLink: { 
+    link: { 
         type: String,
-        required: true
+        
+    },
+    resource:{
+        type: String,
+        
     },
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -42,9 +46,7 @@ const projectSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
-    resources:[{
-        type: String
-    }],
+    
     datePosted:{
         type: Date,
         default: Date.now

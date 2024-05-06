@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
+import handlebarsHelpers from "./helpers.js"
 import Project from "./models/projects.models.js";
 
 const app = express();
@@ -21,7 +22,7 @@ app.use("/public", staticDir);
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
+app.engine("handlebars", exphbs.engine({ defaultLayout: "main" , helpers: handlebarsHelpers}));
 app.set("view engine", "handlebars");
 
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
@@ -84,9 +85,9 @@ app.use("/auth/register", (req, res, next) => {
 //   res.render("profile");
 // });
 
-// app.get("/create", (req, res) => {
-//   res.render("create-project");
-// });
+app.get("/create", (req, res) => {
+  res.render("create-project");
+});
 
 // app.get("/show", (req, res) => {
 //   res.render("show-project");

@@ -109,6 +109,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
+    console.log("In controller")
     const { email }  = req.body;
     const { password } = req.body;
 
@@ -142,9 +143,8 @@ export const login = async (req, res) => {
     res.cookie("token", token);
     // console.log(token)
     // res.status(200).json(token)
-    res.redirect("/", {
+    res.render("dashboard", {
       title: "Home Page",
-      
     });
   } catch (error) {
     res.status(400).render("login", {

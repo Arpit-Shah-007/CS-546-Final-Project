@@ -81,6 +81,7 @@ export const registerUser = async (
 export const loginUser = async (email, password) => {
   email = email.trim();
   password = password.trim();
+  console.log("In data")
 
   if (!email || !password) {
     throw "All fields are required";
@@ -114,7 +115,7 @@ export const loginUser = async (email, password) => {
   // console.log("Password provided by user:", password);
   // console.log("Password match:", passwordMatch);
 if (!passwordMatch) {
-    //console.log("fail")
+    console.log("fail")
     throw "Invalid username or password";
 }
   

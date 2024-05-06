@@ -10,10 +10,15 @@ export const createProject = async (req, res) => {
         const { description } = req.body;
         const { branch} = req.body;
         const { subject } = req.body;
-        const { author } = req.body;
+        const { link } = req.body;
+        const {resource} = req.body;
+
+        const  author  = req.user.id;
         let videoLink;
         if (req.file) {
             videoLink = req.file.path;
+        }else{
+            videoLink = "/public/uploads/demo_1.mp4"
         }
         //console.log(videoLink);
 
@@ -22,7 +27,9 @@ export const createProject = async (req, res) => {
         if (!description || description.trim() === "") throw  'Please provide a valid description'
         if (!branch || branch.trim() === "") throw  'Please provide a valid branch'
         if (!subject || subject.trim() === "") throw  'Please provide a valid subject'
-        //if (!author || author.trim() === "") throw  'Please provide a valid author'
+        if (!link || link.trim() === "") throw  'Please provide a valid Link'
+        if (!resource || resource.trim() === "") throw  'Please provide a valid Resource'
+        if (!author || author.trim() === "") throw  'Please provide a valid author'
         if (!videoLink || videoLink.trim() === "") throw 'Video must be provided'
 
         // Checking correct types
@@ -30,7 +37,9 @@ export const createProject = async (req, res) => {
         if (typeof description !== 'string') throw  'Description should be a string'
         if (typeof branch !== 'string') throw  'Branch should be a string'
         if (typeof subject !== 'string') throw  'Subject should be a string'
-        //if (typeof author !== 'string' && !Types.ObjectId.isValid(author)) throw 'Author should be a string or a valid ObjectId'
+        if (typeof link !== 'string') throw  'Link should be a string'
+        if (typeof resource !== 'string') throw  'Resource should be a string'
+        if (typeof author !== 'string' && !Types.ObjectId.isValid(author)) throw 'Author should be a string or a valid ObjectId'
         if (typeof videoLink !== 'string') throw  'Video link should be a string'
 
         const project = await createProjectInDB(
@@ -39,6 +48,8 @@ export const createProject = async (req, res) => {
             branch,
             subject,
             author,
+            link,
+            resource,
             videoLink
         );
 
@@ -170,15 +181,18 @@ export const getProjectById = async (req, res) => {
         if (!project) {
             return res.status(404).json({ error: "Project not found" });
         }
-
         const user = req.user;
+        project.current_user = req.user;
+        const id = user.id.toString()
+        console.log(user)
         const isAdmin = user.role === 'admin';
-        //console.log(project)
+        
+        console.log(project)
         res.render("show-project", {
             likesCount,
             dislikesCount,
+            user,
             project: project.toObject(),
-            user: user,
             isAdmin: isAdmin
         });
     } catch (error) {

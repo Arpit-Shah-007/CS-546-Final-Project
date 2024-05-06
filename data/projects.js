@@ -5,20 +5,24 @@ import User from "../models/user.model.js";
 import Comment from "../models/comments.models.js";
 
 
-export const createProjectInDB = async (title, description, branch, subject, author, videoLink) => {
+export const createProjectInDB = async (title, description, branch, subject, author, link, resource, videoLink) => {
     
     if (!title || title.trim() === "") throw  'Please provide a valid title'
     if (!description || description.trim() === "") throw  'Please provide a valid description'
     if (!branch || branch.trim() === "") throw  'Please provide a valid branch'
     if (!subject || subject.trim() === "") throw  'Please provide a valid subject'
-    //if (!author || author.trim() === "") throw  'Please provide a valid author'
+    if (!author || author.trim() === "") throw  'Please provide a valid author'
+    if (!link || link.trim() === "") throw  'Please provide a valid Link'
+    if (!resource || resource.trim() === "") throw  'Please provide a valid Resource'
     if (!videoLink || videoLink.trim() === "") throw 'Video link must be provided'
 
     if (typeof title !== 'string') throw  'Title should be a string'
     if (typeof description !== 'string') throw  'Description should be a string'
     if (typeof branch !== 'string') throw  'Branch should be a string'
     if (typeof subject !== 'string') throw  'Subject should be a string'
-    //if (typeof author !== 'string' && !Types.ObjectId.isValid(author)) throw  'Author should be a string or a valid ObjectId'   
+    if (typeof link !== 'string') throw  'Link should be a string'
+    if (typeof resource !== 'string') throw  'Resource should be a string'
+    if (typeof author !== 'string' && !Types.ObjectId.isValid(author)) throw  'Author should be a string or a valid ObjectId'   
     if (typeof videoLink !== 'string') throw  'Video link should be a string'
 
     // Create the project in the database
@@ -27,6 +31,8 @@ export const createProjectInDB = async (title, description, branch, subject, aut
         description,
         branch,
         subject,
+        link,
+        resource,
         author,
         videoLink
     });
@@ -98,15 +104,13 @@ export const getProjectForId = async (id) => {
           path: 'comments',
           populate: {
             path: 'userId',
-            model: 'User',
-            select: 'firstName lastName'
           }
         })
         .populate('author', 'firstName lastName profilePic');
 
         const likesCount = project.likes.length;
         const dislikesCount = project.dislikes.length;
-  
+        //console.log(project)
       if (!project) throw "Project not found with the provided id";
       return { project, likesCount, dislikesCount };
     } catch (error) {
@@ -175,27 +179,28 @@ export const findProjectForSearch = async (searchParam) =>{
 
 
 export const likeProject = async (userId, projectId) => {
+    console.log("Data function")
     if (!userId) throw "Please provide the userId";
     if (userId.trim() === "") throw "userId cannot be just white spaces";
     if (typeof userId !== 'string' && !Types.ObjectId.isValid(userId)) throw "userId should be a valid ObjectId";
-
+    console.log("1")
     if (!projectId) throw "Please provide the projectId";
     if (projectId.trim() === "") throw "projectId cannot be just white spaces";
     if (typeof projectId !== 'string' && !Types.ObjectId.isValid(projectId)) throw "projectId should be a valid ObjectId";
-
+    console.log("2")
     try {
         const project = await Project.findById(projectId);
-
+        //console.log(project)
         if (!project) {
             throw new Error("Project not found");
         }
 
         //console.log(project)
         if(project.author.toString() === userId){
-            //console.log("same")
+            console.log("same")
             throw "Cannot like your own post"
         }
-
+        console.log("object")
         const userDislikedIndex = project.dislikes.indexOf(userId);
 
         if (project.likes.includes(userId)) {
