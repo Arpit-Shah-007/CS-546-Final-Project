@@ -27,12 +27,12 @@ export const register = async (req, res) => {
     if (!confirmPassword) {
       throw "ConfirmPassword is required";
     }
-    // if (!profilePic) {
-    //   throw "ProfilePic is required";
-    // }
-    // if (!role) {
-    //   throw "Role is required";
-    // }
+    if (!profilePic) {
+    throw "ProfilePic is required";
+    }
+    if (!role) {
+      throw "Role is required";
+    }
 
     if (
       typeof firstName !== "string" ||
@@ -80,8 +80,6 @@ export const register = async (req, res) => {
     // ) {
     //   throw "Invalid role. It should be either admin or user";
     // }
-    const profilePic = "https://avatar.iran.liara.run/public"
-    const role = "user";
     const result = await userData.registerUser(
       firstName,
       lastName,
