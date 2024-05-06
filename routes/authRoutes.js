@@ -1,5 +1,11 @@
 import express from "express";
-import { register, login, logout } from "../controllers/auth.controller.js";
+import {
+  register,
+  login,
+  logout,
+  resetPassword,
+  changePassword,
+} from "../controllers/auth.controller.js";
 const router = express.Router();
 
 router
@@ -17,5 +23,28 @@ router
   .post(login);
 
 router.route("/logout").get(logout);
+
+router
+  .route("/reset-password/:id/:token")
+  .get(async (req, res) => {
+    const { id, token } = req.params;
+    res.render("passwordChange", {
+      title: "Reset Password",
+      id,
+      token,
+      hasErrors: false,
+    });
+  })
+  .post(changePassword);
+
+router
+  .route("/reset-password")
+  .get(async (req, res) => {
+    res.render("resetPassword", {
+      title: "Forgot Password",
+      hasErrors: false,
+    });
+  })
+  .post(resetPassword);
 
 export default router;

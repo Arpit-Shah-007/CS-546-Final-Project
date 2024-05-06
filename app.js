@@ -39,6 +39,16 @@ app.use(
   })
 );
 
+app.get("/auth/reset-password/:id/:token", (req, res) => {
+  const { id, token } = req.params;
+  res.render("passwordChange", {
+    title: "Reset Password",
+    id,
+    token,
+    hasErrors: false,
+  });
+});
+
 app.use((req, res, next) => {
   const token = req.cookies.token?.token;
   if (token) {
@@ -51,7 +61,11 @@ app.use((req, res, next) => {
       }
     });
   } else {
-    const nonAuthenticatedRoutes = ["/auth/login", "/auth/register"];
+    const nonAuthenticatedRoutes = [
+      "/auth/login",
+      "/auth/register",
+      "/auth/reset-password",
+    ];
     if (!nonAuthenticatedRoutes.includes(req.path)) {
       res.redirect("/auth/login");
     } else {

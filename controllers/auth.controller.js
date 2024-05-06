@@ -1,4 +1,8 @@
 import { userData } from "../data/index.js";
+import User from "../models/user.model.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 export const register = async (req, res) => {
   try {
@@ -157,3 +161,139 @@ export const logout = async (req, res) => {
     res.redirect("/auth/login");
   }
 };
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    User.findOne({ email: email }).then((user) => {
+      if (!user) {
+        return res.send({ Status: "User not existed" });
+      }
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+      // const token = req.cookies.token?.token;
+      // console.log(token);
+
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+      // console.log(process.env.EMAIL_USER);
+      // console.log(process.env.EMAIL_PASS);
+      // console.log(user.email);
+      const userId = user._id.toString();
+      console.log(userId);
+
+      var mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: user.email,
+        subject: "Reset Password Link",
+        text: `http://localhost:3000/auth/reset-password/${userId}/${token}`,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          return res.send({ Status: "Success" });
+        }
+      });
+      // console.log("Email sent");
+    });
+  } catch (error) {
+    // console.log(error);
+    // console.log(error.message);
+    res.status(400).render("resetPassword", {
+      title: "Reset Password",
+      hasErrors: true,
+      error: error.message || error,
+    });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    console.log("changePassword");
+    const { id, token } = req.params;
+    const { password } = req.body;
+
+    if (!password) {
+      throw "Password is required";
+    }
+
+    if (
+      typeof password !== "string" ||
+      password.trim().length === 0 ||
+      !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])\S{8,}$/.test(password.trim())
+    ) {
+      throw "Invalid password";
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.json({ Status: "Invalid token" });
+      } else {
+        bcrypt.hash(password, 10).then((hash) => {
+          User.findOneAndUpdate({ _id: id }, { password: hash })
+            .then((user) => res.send({ Status: "Success" }))
+            .catch((error) => res.send({ Status: "Error" }));
+        });
+      }
+    });
+  } catch (error) {
+    res.status(400).render("changePassword", {
+      title: "Change Password",
+      hasErrors: true,
+      error: error.message || error,
+    });
+  }
+};
+//   try {
+//     const { id, token } = req.params;
+//     const { password } = req.body;
+
+//     // Check if password is provided and valid
+//     if (!password) {
+//       throw "Password is required";
+//     }
+
+//     if (
+//       typeof password !== "string" ||
+//       password.trim().length === 0 ||
+//       !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])\S{8,}$/.test(password.trim())
+//     ) {
+//       throw "Invalid password";
+//     }
+
+//     // Verify the token
+//     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+//       if (err) {
+//         return res.json({ status: "Invalid token" });
+//       } else {
+//         // Hash the new password
+//         const hashedPassword = await bcrypt.hash(password, 10);
+
+//         // Update user's password in the database
+//         User.findByIdAndUpdate(
+//           id,
+//           { password: hashedPassword },
+//           { new: true }, // Return the updated user object
+//           (updateErr, updatedUser) => {
+//             if (updateErr) {
+//               return res.json({ status: "Error updating password" });
+//             } else {
+//               return res.json({ status: "Password updated successfully" });
+//             }
+//           }
+//         );
+//       }
+//     });
+//   } catch (error) {
+//     res.status(400).json({ status: "Error", message: error.message || error });
+//   }
+// };
