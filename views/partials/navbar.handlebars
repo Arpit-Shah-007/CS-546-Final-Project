@@ -1,25 +1,22 @@
 <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
-    <a class="navbar-brand text-primary cursor-pointer" id=""
-        onclick="navigate('/')">PROJEX</a>
+    <a class="navbar-brand text-primary cursor-pointer" id="" onclick="navigate('/')">PROJEX</a>
     <form class="form-inline" id="search_form">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
         <button class="btn btn-outline-primary " type="submit">Search</button>
 
     </form>
     <div>
-        <button type="button" class="btn btn-danger mr-10" 
-            title="Add Project" onclick="navigate('/reportList')">
+        <button type="button" class="btn btn-danger mr-10" title="Add Project" onclick="navigate('/reportList')">
             Reports
         </button>
-        <button type="button" class="btn btn-outline-primary mr-10" 
-            title="Add Project" onclick="navigate('/create')">
+        <button type="button" class="btn btn-outline-primary mr-10" title="Add Project" onclick="navigate('/create')">
             Create Project
         </button>
-        
 
-        <div class="btn-group mr-10     " id="cursor-pointer">
-            <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+        <div class="btn-group mr-10" id="cursor-pointer">
+            <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar"
+                id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <div class="dropdown-menu dropdown-menu-left">
                 <a class="dropdown-item" onclick="navigate('/profile')">Profile</a>
                 <a class="dropdown-item" onclick="logOut()">Log Out</a>
@@ -32,10 +29,10 @@
 
 <script>
     function navigate(route) {
-    window.location.href = route;
-}
+        window.location.href = route;
+    }
 
-function logOut(){
-    window.location.href = "http://localhost:3000/auth/logout";
-}
+    function logOut() {
+        window.location.href = "http://localhost:3000/auth/logout";
+    }
 </script>

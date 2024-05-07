@@ -5,7 +5,7 @@ import {createReport,getAllReports,getReportById,deleteReportById} from "../cont
 const router = express.Router();
 
 // Route to create a new report
-router.post("/", createReport);
+router.post("/:id", createReport);
 
 // Route to fetch all reports
 router.get("/", getAllReports);
