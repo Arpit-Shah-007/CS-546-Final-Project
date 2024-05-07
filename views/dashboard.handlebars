@@ -1,99 +1,226 @@
 <div class="container-fluid px-0">
-   <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
-    <a class="navbar-brand text-primary cursor-pointer" id=""
-        onclick="navigate('/')">PROJEX</a>
-    <form class="form-inline" id="search_form">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
-        <button class="btn btn-outline-primary " type="submit">Search</button>
+    <nav class="navbar  navbar-dark bg-dark justify-content-between py-3">
+        <a class="navbar-brand text-primary" href="/">PROJEX</a>
+        <form class="form-inline" id="search_form" action="/project/search" method="GET">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search"
+                name="searchParam">
+            <button class="btn btn-outline-primary " type="submit">Search</button>
+        </form>
+        <div>
+            {{#if isAdmin}}
+            <button type="button" class="btn btn-danger mr-10" title="Add Project" onclick="navigate('/report')">
+                Reports
+            </button>
+            {{/if}}
+            <button type="button" class="btn btn-outline-primary mr-10" title="Add Project"
+                onclick="navigate('/project/create')">
+                Create Project
+            </button>
 
-    </form>
-    <div>
-        {{#if isAdmin}}
-        <button type="button" class="btn btn-danger mr-10" 
-            title="Add Project" onclick="navigate('/reportList')">
-            Reports
-        </button>
-        {{/if}}
-        <button type="button" class="btn btn-outline-primary mr-10" 
-            title="Add Project" onclick="navigate('/create')">
-            Create Project
-        </button>
-        
 
-        <div class="btn-group mr-10     " id="cursor-pointer">
-            <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <div class="dropdown-menu dropdown-menu-left">
-                <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')">Profile</a>
-                <a class="dropdown-item" onclick="logOut()">Log Out</a>
+            <div class="btn-group mr-10" style="cursor: pointer;">
+                <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar"
+                    id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="dropdown-menu dropdown-menu-right" style="left: auto; right: 0;">
+                    <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')"
+                        style="cursor: pointer;">Profile</a>
+                    <a class="dropdown-item" onclick="logOut()" style="cursor: pointer;">Log Out</a>
+                </div>
+            </div>
+
+
+        </div>
+
+    </nav>
+</div>
+
+<div class="container mt-10 ">
+    <div class="container">
+        <div class="row">
+            <div class=" col text-center mb-3">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Filter by branch
+                    </button>
+                    <ul class="dropdown-menu">
+
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Computer Science">Computer
+                                Science</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Machine Learning">Machine
+                                Learning</a></li>
+                        <li><a class="dropdown-item"
+                                href="/project/search?searchParam=Artificial Intelligence">Artificial Intelligence</a>
+                        </li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Data Science">Data Science</a>
+                        </li>
+                        <li><a class="dropdown-item"
+                                href="/project/search?searchParam=Information Technology">Information Technology</a>
+                        </li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Software Engineering">Software
+                                Engineering</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Cybersecurity">Cybersecurity</a>
+                        </li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Network Engineering">Network
+                                Engineering</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Robotics">Robotics</a></li>
+                        <li><a class="dropdown-item"
+                                href="/project/search?searchParam=Human-Computer Interaction">Human-Computer
+                                Interaction</a></li>
+
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Filter by subject
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item"
+                                href="/project/search?searchParam=Algorithms and Data Structures">Algorithms and Data
+                                Structures</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Operating Systems">Operating
+                                Systems</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Software Engineering">Software
+                                Engineering</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Deep Learning">Deep Learning</a>
+                        </li>
+                        <li><a class="dropdown-item"
+                                href="/project/search?searchParam=Reinforcement Learning">Reinforcement Learning</a>
+                        </li>
+                        <li><a class="dropdown-item"
+                                href="/project/search?searchParam=Natural Language Processing">Natural Language
+                                Processing</a></li>
+                        <li><a class="dropdown-item"
+                                href="/project/search?searchParam=Knowledge Representation and Reasoning">Knowledge
+                                Representation and Reasoning</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Computer Vision">Computer
+                                Vision</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Intelligent Agents">Intelligent
+                                Agents</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Statistical Analysis">Statistical
+                                Analysis</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Data Visualization">Data
+                                Visualization</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Big Data Analytics">Big Data
+                                Analytics</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Information Security">Information
+                                Security</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=IT Infrastructure Management">IT
+                                Infrastructure Management</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Cloud Computing">Cloud
+                                Computing</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Agile Development">Agile
+                                Development</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Quality Assurance">Quality
+                                Assurance</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=DevOps">DevOps</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Network Security">Network
+                                Security</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Cryptography">Cryptography</a>
+                        </li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Cyber Threat Intelligence">Cyber
+                                Threat Intelligence</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Routing and Switching">Routing
+                                and Switching</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Autonomous Systems">Autonomous
+                                Systems</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=User Experience Design">User
+                                Experience Design</a></li>
+                        <li><a class="dropdown-item" href="/project/search?searchParam=Interaction Design">Interaction
+                                Design</a></li>
+                        <li><a class="dropdown-item"
+                                href="/project/search?searchParam=Accessibility Engineering">Accessibility
+                                Engineering</a></li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class=" col text-center mb-3">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        SORT
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/project/sort?sortBy=date">Date</a></li>
+                        <li><a class="dropdown-item" href="/project/sort?sortBy=likes">Likes</a></li>
+                        <li><a class="dropdown-item" href="/project/sort?sortBy=dislikes">Dislikes</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
+
+
     </div>
 
-</nav>
-</div>
-<div class="container mt-10 ">
     <div id="error-message" class="text-danger"></div>
+    {{#if projects.length}}
     <div class="row justify-content-around ">
         {{#each projects}}
         <div class="card lg:card-side bg-base-100 shadow-xl mb-4" style="width: 600px;">
             <figure><video controls style="width: 350px; height: 300px;">
-                    <source src="{{this.videoLink}}" type="video/mp4">
+                    <source src="/{{this.videoLink}}" type="video/mp4">
                 </video></figure>
             <div class="card-body" style="width: 200px; height: 300px;">
                 <h2 class="card-title">{{this.title}}</h2>
                 <p>Click the button to se detailed project.</p>
-            <div class="card-actions justify-end">
-                <button class="btn btn-primary" onclick="expandProject('{{this._id}}')">Expand</button>
-            </div>
+                <div class="card-actions justify-end">
+                    <button class="btn btn-primary" onclick="expandProject('{{this._id}}')">Expand</button>
+                </div>
             </div>
         </div>
         {{/each}}
     </div>
+    {{else}}
+    <div id="error-message" class="text-danger text-center">
+        <p class="font-bold text-2xl">No projects found.</p>
+    </div>
+    {{/if}}
 </div>
 
 <script>
     function navigate(route) {
-    window.location.href = route;
-}
-
-function logOut(){
-    fetch('http://localhost:3000/auth/logout', {
-        method: 'GET'
-    })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = `/`; 
-        } else {
-            console.error('Failed to logout');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
-function expandProject(projectId) {
-  // Clear any existing error message
-  document.getElementById('error-message').textContent = '';
-
-  fetch(`/project/${projectId}`, {
-    method: 'GET'
-  })
-  .then(response => {
-    if (response.ok) {
-      // Handle the response, e.g., redirect to the project details page
-      window.location.href = `/project/${projectId}`;
-    } else {
-      // Display the error message
-      document.getElementById('error-message').textContent = 'Failed to fetch project details';
+        window.location.href = route;
     }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    // Display the error message
-    document.getElementById('error-message').textContent = 'An error occurred while fetching project details';
-  });
-}
+
+    function logOut() {
+        fetch('http://localhost:3000/auth/logout', {
+            method: 'GET'
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = `/`;
+                } else {
+                    console.error('Failed to logout');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function expandProject(projectId) {
+        // Clear any existing error message
+        document.getElementById('error-message').textContent = '';
+
+        fetch(`http://localhost:3000/project/${projectId}`, {
+            method: 'GET'
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Handle the response, e.g., redirect to the project details page
+                    window.location.href = `/project/${projectId}`;
+                } else {
+                    // Display the error message
+                    document.getElementById('error-message').textContent = 'Failed to fetch project details';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Display the error message
+                document.getElementById('error-message').textContent = 'An error occurred while fetching project details';
+            });
+    }
 
 </script>

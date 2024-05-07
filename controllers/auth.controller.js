@@ -3,16 +3,13 @@ import { userData } from "../data/index.js";
 export const register = async (req, res) => {
   try {
     //console.log(req.body)
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      confirmPassword,
-      // profilePic,
-      //role,
-    } = req.body;
-    
+    const { firstName } = req.body;
+    const { lastName } = req.body;
+    const { email } = req.body;
+    const { password } = req.body;
+    const { confirmPassword } = req.body;
+
+    //console.log(lastName)
     if (!firstName) {
       throw "FirstName is required";
     }
@@ -34,7 +31,7 @@ export const register = async (req, res) => {
     // if (!role) {
     //   throw "Role is required";
     // }
-    
+
     if (
       typeof firstName !== "string" ||
       firstName.trim().length === 0 ||
@@ -58,7 +55,7 @@ export const register = async (req, res) => {
     ) {
       throw "Invalid email";
     }
-    console.log("3")
+
     if (
       typeof password !== "string" ||
       password.trim().length === 0 ||
@@ -81,9 +78,9 @@ export const register = async (req, res) => {
     // ) {
     //   throw "Invalid role. It should be either admin or user";
     // }
-    const profilePic = "https://avatar.iran.liara.run/public"
+    const profilePic = "https://avatar.iran.liara.run/public";
     const role = "user";
-    
+
     const result = await userData.registerUser(
       firstName,
       lastName,
@@ -92,9 +89,9 @@ export const register = async (req, res) => {
       profilePic,
       role
     );
-    
+
     if (!result) {
-      console.log("fail")
+      //console.log("fail")
       res.status(500).render("error", {
         title: "Error Page",
         status: 500,
@@ -103,13 +100,18 @@ export const register = async (req, res) => {
     }
     res.redirect("/auth/login");
   } catch (error) {
-    res.status(400).json({error: error});
+    // res.status(400).json({error: error});
+    res.render("register", {
+      title: "Register",
+      hasErrors: true,
+      error: error,
+    });
   }
 };
 
 export const login = async (req, res) => {
   try {
-    const { email }  = req.body;
+    const { email } = req.body;
     const { password } = req.body;
 
     if (!email) {
@@ -142,9 +144,8 @@ export const login = async (req, res) => {
     res.cookie("token", token);
     // console.log(token)
     // res.status(200).json(token)
-    res.redirect("/", {
+    res.render("dashboard", {
       title: "Home Page",
-      
     });
   } catch (error) {
     res.status(400).render("login", {
@@ -158,7 +159,7 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
   if (req.cookies.token) {
     res.clearCookie("token");
-    res.render("logout", { title: "Logout" });
+    res.redirect("/auth/login");
   } else {
     res.redirect("/auth/login");
   }

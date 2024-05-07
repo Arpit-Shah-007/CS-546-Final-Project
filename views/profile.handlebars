@@ -1,23 +1,33 @@
 <div class="container-fluid px-0">
-   <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
-    <a class="navbar-brand text-primary cursor-pointer" id="" onclick="navigate('/')">PROJEX</a>
-    <form class="form-inline" id="search_form">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
-        <button class="btn btn-outline-primary " type="submit">Search</button>
+  <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
+    <a class="navbar-brand text-primary" href="/">PROJEX</a>
+    <form class="form-inline" id="search_form" action="/project/search" method="GET">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search"
+        name="searchParam">
+      <button class="btn btn-outline-primary " type="submit">Search</button>
     </form>
     <div>
-        <button type="button" class="btn btn-danger mr-10" title="Reports" onclick="navigate('/reportList')">Reports</button>
-        <button type="button" class="btn btn-outline-primary mr-10" title="Create Project" onclick="navigate('/create')">Create Project</button>
-        <div class="btn-group mr-10">
-            <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <div class="dropdown-menu dropdown-menu-left">
-                <a class="dropdown-item" onclick="navigate('/profile')">Profile</a>
-                <a class="dropdown-item" onclick="logOut()">Log Out</a>
-            </div>
+      {{#if isAdmin}}
+      <button type="button" class="btn btn-danger mr-10" title="Add Project" onclick="navigate('/reportList')">
+        Reports
+      </button>
+      {{/if}}
+      <button type="button" class="btn btn-outline-primary mr-10" title="Add Project"
+        onclick="navigate('/project/create')">
+        Create Project
+      </button>
+
+      <div class="btn-group mr-10" style="cursor: pointer;">
+        <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="dropdown-menu dropdown-menu-right" style="left: auto; right: 0;">
+          <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')" style="cursor: pointer;">Profile</a>
+          <a class="dropdown-item" onclick="logOut()" style="cursor: pointer;">Log Out</a>
         </div>
+      </div>
     </div>
-   </nav>
+
+  </nav>
 </div>
 
 <section class="gradient-custom-3">
@@ -29,13 +39,62 @@
             <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
               <img src="https://avatar.iran.liara.run/public" alt="Avatar" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px; z-index: 1">
-              <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark" data-mdb-ripple-color="dark"
-                style="z-index: 1;">
+              {{!-- <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark"
+                data-mdb-ripple-color="dark" style="z-index: 1;">
                 Edit profile
+              </button> --}}
+              <button type="button" data-mdb-button-init data-mdb-ripple-init style="z-index: 1;"
+                class="btn btn-outline-dark" data-mdb-ripple-color="dark" data-toggle="modal"
+                data-target="#editProfileModal">
+                Edit Profile
               </button>
+              <button type="button" onclick="deleteProfile()" style="z-index: 1;" class="btn btn-outline-danger mt-2">
+                Delete Profile
+              </button>
+              <!-- Modal -->
+              <!-- Modal -->
+              <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog"
+                aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered rounded-lg" role="document">
+                  <div class="modal-content rounded-lg">
+                    <div class="modal-header bg-dark text-white rounded-top">
+                      <h5 class="modal-title" id="editProfileModalLabel">Update User Profile</h5>
+                      <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="editProfileForm" action="http://localhost:3000/user/update/{{user._id}}" method="post">
+                        <div class="form-group">
+                          <label for="firstName">First Name</label>
+                          <input type="text" class="form-control rounded-pill" id="firstName" name="firstName"
+                            value="{{user.firstName}}">
+                        </div>
+                        <div class="form-group">
+                          <label for="lastName">Last Name</label>
+                          <input type="text" class="form-control rounded-pill" id="lastName" name="lastName"
+                            value="{{user.lastName}}">
+                        </div>
+                        <div class="form-group">
+                          <label for="email">Email</label>
+                          <input type="email" class="form-control rounded-pill" id="email" name="email"
+                            value="{{user.email}}">
+                        </div>
+                        {{!-- <div class="form-group">
+                          <label for="password">Password</label>
+                          <input type="password" class="form-control rounded-pill" id="password" name="password"
+                            placeholder="Enter new password">
+                        </div> --}}
+                        <button type="submit" class="btn btn-outline-success btn-block rounded-pill">Save
+                          Changes</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="ms-3" style="margin-top: 130px;">
-              <h5>{{user.firstName}}</h5>
+              <h5>{{user.firstName}} {{ user.lastName}}</h5>
               <p>{{user.email}}</p>
             </div>
           </div>
@@ -56,28 +115,29 @@
             </div>
           </div>
           <div class="card-body p-4 text-black">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
               <p class="lead fw-normal mb-0">Posted Projects</p>
             </div>
             <div class="row row-cols-2">
-                {{#each projects}}
-                <div class="col m-4">
-                    <div class="card card-compact w-80 bg-base-100 shadow-xl" style="height: 400px;">
-                        <figure>
-                            <video controls style="width: 100%; height: 200px;">
-                                <source src="/{{this.videoLink}}" type="video/mp4">
-                            </video>
-                        </figure>
-                        <div class="card-body h-200">
-                            <h2 class="card-title">{{this.title}}</h2>
-                            <p>{{this.description}}</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn btn-primary" onclick="navigateToProject('{{this._id}}')">Expand</button>
-                            </div>
-                        </div>
+              {{#each projects}}
+              <div class="col m-4">
+                <div class="card card-compact w-80 bg-base-100 shadow-xl" style="height: 400px;">
+                  <figure>
+                    <video controls style="width: 100%; height: 200px;">
+                      <source src="/{{this.videoLink}}" type="video/mp4">
+                    </video>
+                  </figure>
+                  <div class="card-body h-200">
+                    <h2 class="card-title">{{this.title}}</h2>
+                    <p>{{this.description}}</p>
+                    <div class="card-actions d-flex justify-content-between">
+                      <button class="btn btn-primary" onclick="navigateToUpdate('{{this._id}}')">Update</button>
+                      <button class="btn btn-primary" onclick="navigateToProject('{{this._id}}')">Expand</button>
                     </div>
+                  </div>
                 </div>
-                {{/each}}
+              </div>
+              {{/each}}
             </div>
           </div>
         </div>
@@ -87,15 +147,51 @@
 </section>
 
 <script>
-    function navigate(route) {
+  function navigate(route) {
     window.location.href = route;
-}
+  }
 
-function logOut(){
-    window.location.href = "http://localhost:3000/auth/logout";
-}
+  function logOut() {
+    fetch('http://localhost:3000/auth/logout', {
+      method: 'GET'
+    })
+      .then(response => {
+        if (response.ok) {
+          window.location.href = `/`;
+        } else {
+          console.error('Failed to logout');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
 
-function navigateToProject(projectId) {
+  function deleteProfile() {
+    fetch('http://localhost:3000/user/delete/{{user._id}}', {
+      method: 'DELETE',
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        alert('Profile deleted successfully');
+        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        window.location.href = '/';
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+        // Handle error scenario
+      });
+  }
+
+  function navigateToUpdate(projectId) {
+    window.location.href = `http://localhost:3000/project/update/${projectId}`;
+  }
+
+  function navigateToProject(projectId) {
     window.location.href = `/project/${projectId}`;
-}
+  }
+
+
 </script>

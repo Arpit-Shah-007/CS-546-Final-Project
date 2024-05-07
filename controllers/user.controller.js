@@ -1,6 +1,7 @@
 import { userData } from "../data/index.js";
 import { Types } from "mongoose";
 import { like } from "./project.controller.js";
+import User from "../models/user.model.js";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -23,12 +24,19 @@ export const getUserById = async (req, res) => {
     if (!Types.ObjectId.isValid(id)) {
       throw "Please enter a valid string";
     }
-    const {user, projects, likesCount, dislikesCount} = await userData.getUserById(id);
+    const { user, projects, likesCount, dislikesCount } =
+      await userData.getUserById(id);
     //res.json(user);
     //console.log(user)
-    console.log(projects[0])
-
-    res.render('profile', {user, projects, likesCount, dislikesCount});
+    //console.log(projects[0])
+    console.log(user);
+    res.render("profile", {
+      user,
+      projects,
+      likesCount,
+      dislikesCount,
+      title: "Profile",
+    });
   } catch (e) {
     res.status(404).json({ error: e });
   }
@@ -56,15 +64,14 @@ export const getUserByEmail = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const email = req.body.email;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const profilePic = req.body.profilePic;
-    if (!id || !email || !firstName || !lastName || !profilePic) {
+    const { email, firstName, lastName } = req.body;
+
+    // Validate input fields
+    if (!id || !email || !firstName || !lastName) {
       throw "All fields are required";
     }
     if (typeof id !== "string" || id.length === 0) {
-      throw "Please enter a valid string";
+      throw "Please enter a valid string for ID";
     }
     if (
       typeof email !== "string" ||
@@ -72,45 +79,42 @@ export const updateUser = async (req, res) => {
       typeof firstName !== "string" ||
       firstName.length === 0 ||
       typeof lastName !== "string" ||
-      lastName.length === 0 ||
-      typeof profilePic !== "string" ||
-      profilePic.length === 0
+      lastName.length === 0
     ) {
-      throw "Please enter a valid string";
-    }
-    if (!Types.ObjectId.isValid(id)) {
-      throw "Please enter a valid id";
+      throw "Please enter valid strings for email, first name, and last name";
     }
     if (!/^[a-zA-Z]{2,25}$/.test(firstName)) {
-      throw "Invalid first name.";
+      throw "Invalid first name format";
     }
-
     if (!/^[a-zA-Z]{2,25}$/.test(lastName)) {
-      throw "Invalid last name.";
+      throw "Invalid last name format";
     }
-
-    if (!/^[a-zA-Z0-9]{2,25}$/.test(profilePic)) {
-      throw "Invalid profile picture.";
-    }
-
     if (!/^[a-zA-Z][a-zA-Z0-9]*@stevens\.edu$/.test(email.toLowerCase())) {
-      throw "Invalid email.";
+      throw "Invalid email format";
     }
 
+    // Check if the user exists
     const oldUser = await userData.getUserById(id);
     if (!oldUser) {
-      throw "User not found.";
+      throw "User not found";
     }
-    const user = await userData.updateUser(
+
+    // Update user document
+    const updatedUser = await User.findByIdAndUpdate(
       id,
-      email,
-      firstName,
-      lastName,
-      profilePic
+      { email, firstName, lastName },
+      { new: true }
     );
-    res.json(user);
-  } catch (e) {
-    res.status(404).json({ error: e });
+
+    // Check if the update was successful
+    if (!updatedUser) {
+      throw "Failed to update user";
+    }
+
+    res.redirect("/user/" + id); // Return the updated user document
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(400).json({ error: error.message });
   }
 };
 

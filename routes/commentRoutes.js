@@ -7,7 +7,7 @@ import {
   deleteComment,
 } from "../controllers/comment.controller.js";
 
-router.route("/").post(createComment);
+router.route("/:id").post(createComment);
 
 router.route("/:id").put(updateComment).delete(deleteComment);
 
