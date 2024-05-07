@@ -48,12 +48,13 @@ export const createProjectInDB = async (title, description, branch, subject, aut
 };
 
 
-export const updateProjectInDB = async (projectId, title, description, branch, subject, author, videoLink) => {
+export const updateProjectInDB = async (projectId, title, description, branch, subject, author, videoLink, link, resources) => {
     
     if (!projectId || !Types.ObjectId.isValid(projectId)) {
         throw new Error('Invalid project ID');
     }
-
+    
+    console.log("object12354")
    //Checking if the params exists
    if (!title || title.trim() === "") throw  'Please provide a valid title'
    if (!description || description.trim() === "") throw  'Please provide a valid description'
@@ -84,11 +85,13 @@ export const updateProjectInDB = async (projectId, title, description, branch, s
                 branch,
                 subject,
                 author,
+                link,
+                resource: resources,
                 videoLink
             },
             { new: true }
         );
-
+        //console.log(updatedProject)
         if (!updatedProject) {
             throw "Project not found or could not be updated";
         }
@@ -112,7 +115,7 @@ export const getProjectForId = async (id) => {
             path: 'userId',
           }
         })
-        .populate('author', 'firstName lastName profilePic');
+        .populate('author', 'firstName lastName profilePic').lean();
 
         const likesCount = project.likes.length;
         const dislikesCount = project.dislikes.length;
@@ -162,7 +165,6 @@ export const deleteProjectForId = async (id) => {
 export const findProjectForSearch = async (searchParam) =>{
     if(!searchParam) throw "Please provide the search parameter";
     if(typeof searchParam !== 'string') throw "Search Parameter must be a string";
-
     try {
         const projects = await Project.find({
             $or:[

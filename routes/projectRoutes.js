@@ -3,6 +3,9 @@ import { createProject, updateProject, deleteProject, renderUpdate, sortProjects
 import { upload } from "../multer/config.js";
 const router = express.Router();
 
+// Search and Sort
+router.get("/search", searchProjects);
+router.get('/sort', sortProjects);
 
 // To render Create Project Page
 router.get("/create", (req, res) => {
@@ -14,19 +17,19 @@ router.get("/create", (req, res) => {
       isAdmin: isAdmin
   });
 })
-router.post("/", upload.single('video'), createProject);
+router.post("/:id",upload.single('video'), updateProject);
 
-// Search and Sort
-router.get("/search", searchProjects);
-router.get('/sort', sortProjects);
+router.post("/", upload.single('video'), createProject);
+router.get("/:id", getProjectById)
+
+
 
 // To update Project
 router.get("/update/:id", renderUpdate);
 
-router.put("/:id",upload.single('video'), updateProject);
 
 // Get project by id
-router.get("/:id", getProjectById)
+
 
 // To delete
 router.delete("/:id", deleteProject);
@@ -36,5 +39,9 @@ router.delete("/:id", deleteProject);
 // Like / Dislike 
 router.post('/:id/like', like);
 router.post('/:id/dislike', dislike);
+
+
+
+
 
 export default router;

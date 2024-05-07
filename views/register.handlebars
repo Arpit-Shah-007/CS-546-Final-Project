@@ -1,5 +1,5 @@
 <main>
-  <section class="gradient-form" >
+  <section class="gradient-form">
     <div class="container py-5">
       <div class="row d-flex justify-content-center align-items-center">
         <div class="col-xl-16">
@@ -10,7 +10,7 @@
                   <div class="text-center d-flex flex-column align-items-center">
                     <img src="../public/images/projex-high-resolution-logo.png" style="width: 185px;" alt="logo">
                     <h4 class="mt-1 mb-5 pb-1">We are The Projex Team</h4>
-                    </div>
+                  </div>
 
 
                   <form id="register-form" class="register-form" action="/auth/register" method="POST">
@@ -52,8 +52,8 @@
                         Register</button>
                     </div>
                   </form>
-                  {{#if hasError}}
-                  <div>{{error}}</div>
+                  {{#if hasErrors}}
+                  <div class="text-danger">{{error}}</div>
                   {{/if}}
                   <div id="error-block" class="error-block text-danger" hidden></div>
                   <div class="d-flex align-items-center justify-content-center pb-4">
@@ -81,68 +81,40 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    let firstName = document.getElementById('firstName');
-    let lastName = document.getElementById('lastName');
-    let email = document.getElementById('email');
-    let password = document.getElementById('password');
-    let confirmPassword = document.getElementById('confirmPassword');
-    let profilePic = document.getElementById('profilePic');
     let registerForm = document.getElementById('register-form');
     let errorDiv = document.getElementById('error-block');
 
     if (registerForm) {
-      registerForm.addEventListener("submit", (e) => {
+      registerForm.addEventListener("submit", function (e) {
+        let firstName = document.getElementById('firstName');
+        let lastName = document.getElementById('lastName');
+        let email = document.getElementById('email');
+        let password = document.getElementById('password');
+        let confirmPassword = document.getElementById('confirmPassword');
+
         let errors = [];
-        if (errorDiv) {
-          errorDiv.innerHTML = "";
-          errorDiv.hidden = true;
-        }
-        if (
-          !firstName.value ||
-          firstName.value.trim().length === 0 ||
-          !/^[a-zA-Z]{2,25}$/.test(firstName.value.trim())
-        ) {
-          errors.push("FirstName must be a valid String");
+
+        errorDiv.innerHTML = "";
+        errorDiv.hidden = true;
+
+        if (!/^[a-zA-Z]{2,25}$/.test(firstName.value.trim())) {
+          errors.push("First Name must be a valid String");
         }
 
-        if (
-          !lastName.value ||
-          lastName.value.trim().length === 0 ||
-          !/^[a-zA-Z]{2,25}$/.test(lastName.value.trim())
-        ) {
-          errors.push("LastName must be a valid String");
+        if (!/^[a-zA-Z]{2,25}$/.test(lastName.value.trim())) {
+          errors.push("Last Name must be a valid String");
         }
 
-        email.value = email.value.toLowerCase();
-        if (
-          !email.value ||
-          email.value.trim().length === 0 ||
-          !/^[a-zA-Z][a-zA-Z0-9]*@stevens\.edu$/.test(email.value.trim())
-        ) {
+        if (!/^[a-zA-Z][a-zA-Z0-9]*@stevens\.edu$/.test(email.value.trim())) {
           errors.push("Email must be a valid Stevens email address");
         }
 
-        if (
-          !password.value ||
-          password.value.trim().length === 0 ||
-          !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])\S{8,}$/.test(password.value.trim())
-        ) {
+        if (!/(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])\S{8,}/.test(password.value.trim())) {
           errors.push("Password must match the requirements");
         }
 
-        if (
-          !confirmPassword.value ||
-          confirmPassword.value.trim().length === 0 ||
-          confirmPassword.value.trim() !== password.value.trim()
-        ) {
+        if (confirmPassword.value.trim() !== password.value.trim()) {
           errors.push("Passwords do not match");
-        }
-
-        if (
-          !profilePic.value ||
-          profilePic.value.trim().length === 0
-        ) {
-          errors.push("Profile Pic must be a valid String URL");
         }
 
         if (errors.length > 0) {
@@ -155,5 +127,4 @@
       });
     }
   });
-
 </script>

@@ -1,23 +1,27 @@
 <div class="container-fluid px-0">
-   <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
-    <a class="navbar-brand text-primary cursor-pointer" id="" onclick="navigate('/')">PROJEX</a>
-    <form class="form-inline" id="search_form" action="/project/search" method="GET">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="searchParam">
-        <button class="btn btn-outline-primary " type="submit">Search</button>
-    </form>
-    <div>
-        <button type="button" class="btn btn-danger mr-10" title="Reports" onclick="navigate('/reportList')">Reports</button>
-        <button type="button" class="btn btn-outline-primary mr-10" title="Create Project" onclick="navigate('/create')">Create Project</button>
-        <div class="btn-group mr-10">
-            <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <div class="dropdown-menu dropdown-menu-left">
-                <a class="dropdown-item" onclick="navigate('/profile')">Profile</a>
-                <a class="dropdown-item" onclick="logOut()">Log Out</a>
+    <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
+        <a class="navbar-brand text-primary cursor-pointer" id="" onclick="navigate('/')">PROJEX</a>
+        <form class="form-inline" id="search_form" action="/project/search" method="GET">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search"
+                name="searchParam">
+            <button class="btn btn-outline-primary " type="submit">Search</button>
+        </form>
+        <div>
+            <button type="button" class="btn btn-danger mr-10" title="Reports"
+                onclick="navigate('/reportList')">Reports</button>
+            <button type="button" class="btn btn-outline-primary mr-10" title="Create Project"
+                onclick="navigate('/create')">Create Project</button>
+            <div class="btn-group mr-10" style="cursor: pointer;">
+                <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar"
+                    id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="dropdown-menu dropdown-menu-right" style="left: auto; right: 0;">
+                    <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')"
+                        style="cursor: pointer;">Profile</a>
+                    <a class="dropdown-item" onclick="logOut()" style="cursor: pointer;">Log Out</a>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 </div>
 
 <div class="container">

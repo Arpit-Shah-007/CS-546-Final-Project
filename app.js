@@ -78,6 +78,14 @@ app.use("/auth/register", (req, res, next) => {
   } else next();
 });
 
+// app.use("/report", (req,res)=>{
+//   if (req.method === "GET") {
+//     if (req.user.role === 'user') {
+//       res.redirect("/");
+//     } else next();
+//   } else next();
+// })
+
 // app.get("/login", (req, res) => {
 //   res.render("login");
 // });

@@ -18,12 +18,13 @@
                 Create Project
             </button>
 
-            <div class="btn-group mr-10" id="cursor-pointer">
+            <div class="btn-group mr-10" style="cursor: pointer;">
                 <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar"
                     id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <div class="dropdown-menu dropdown-menu-left">
-                    <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')">Profile</a>
-                    <a class="dropdown-item" onclick="logOut()">Log Out</a>
+                <div class="dropdown-menu dropdown-menu-right" style="left: auto; right: 0;">
+                    <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')"
+                        style="cursor: pointer;">Profile</a>
+                    <a class="dropdown-item" onclick="logOut()" style="cursor: pointer;">Log Out</a>
                 </div>
             </div>
         </div>

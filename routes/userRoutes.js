@@ -14,7 +14,7 @@ router.route("/:id").get(getUserById);
 
 router.route("/email/:email").get(getUserByEmail);
 
-router.route("/update/:id").put(updateUser);
+router.route("/update/:id").post(updateUser);
 
 router.route("/delete/:id").delete(deleteUser);
 

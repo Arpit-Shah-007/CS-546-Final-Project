@@ -8,10 +8,9 @@
               <div class="col-lg-6">
                 <div class="card-body p-md-5 mx-md-4">
                   <div class="text-center d-flex flex-column align-items-center">
-                                  <img src="../public/images/projex-high-resolution-logo.png"
-                                      style="width: 185px;" alt="logo">
-                                  <h4 class="mt-1 mb-5 pb-1">We are The Projex Team</h4>
-                    </div>
+                    <img src="../public/images/projex-high-resolution-logo.png" style="width: 185px;" alt="logo">
+                    <h4 class="mt-1 mb-5 pb-1">We are The Projex Team</h4>
+                  </div>
 
                   <form id="login-form" class="login-form">
                     <h4>Please login to your account</h4>
@@ -33,14 +32,14 @@
                       <button id="login-button" class="btn btn-outline-success btn-block fa-lg  mb-3" type="submit">
                         Log in</button>
                     </div>
-                    {{!-- <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger"><a
-                        href="/auth/reset-password">Forgot Password</a></button> --}}
+                    {{!-- <button type="button" data-mdb-button-init data-mdb-ripple-init
+                      class="btn btn-outline-danger"><a href="/auth/reset-password">Forgot Password</a></button> --}}
                     <div id="error-block" class="error-block text-danger" hidden></div>
 
                     <div class="d-flex align-items-center justify-content-center pb-4">
                       <p class="mb-0 mr-4 me-2">Don't have an account?</p>
-                      <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger"><a
-                          href="/auth/register">Register Now!</a></button>
+                      <a href="/auth/register"><button type="button" data-mdb-button-init data-mdb-ripple-init
+                          class="btn btn-outline-danger">Register Now!</button></a>
                     </div>
                   </form>
                 </div>
@@ -126,97 +125,94 @@
 
 
 {{!-- <section class="h-100 gradient-form" style="background-color: #eee;">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-xl-16">
-                <div class="card rounded-3 text-black">
-                    <div class="row g-0">
-                        <div class="col-lg-6">
-                            <div class="card-body p-md-5 mx-md-4">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-16">
+        <div class="card rounded-3 text-black">
+          <div class="row g-0">
+            <div class="col-lg-6">
+              <div class="card-body p-md-5 mx-md-4">
 
-                              <div class="text-center d-flex flex-column align-items-center">
-                                  <img src="../public/images/projex-high-resolution-logo.png"
-                                      style="width: 185px;" alt="logo">
-                                  <h4 class="mt-1 mb-5 pb-1">We are The Projex Team</h4>
-                              </div>
-
-                                <form id="loginForm">
-                                    <p>Please login to your account</p>
-
-                                    <div data-mdb-input-init class="form-outline mb-4">
-                                        <label class="form-label" for="form2Example11">Username</label>
-                                        <input type="email" id="form2Example11" class="form-control"
-                                               placeholder="Email address"/>
-                                    </div>
-
-                                    <div data-mdb-input-init class="form-outline mb-4">
-                                        <label class="form-label" for="form2Example22">Password</label>
-                                        <input type="password" id="form2Example22" class="form-control"
-                                               placeholder="Enter Password"/>
-                                    </div>
-
-                                    <div class="text-center pt-1 mb-5 pb-1">
-                                        <button class="btn btn-outline-success btn-block fa-lg  mb-3" type="submit">Log
-                                            in
-                                        </button>
-                                        <a class="text-muted" href="#!">Forgot password?</a>
-                                    </div>
-
-                                    <div class="d-flex align-items-center justify-content-center pb-4">
-                                        <p class="mb-0 mr-4 me-2">Don't have an account?</p>
-                                        <button type="button" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-outline-danger">Create new
-                                        </button>
-                                    </div>
-
-                                </form>
-
-                            </div>
-                        </div>
-                        <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-                            <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                                <h2 class="mb-3">Projex</h2>
-                                <p class="small mb-0">A project sharing sharing platform that is made specifically
-                                    for Stevens Community</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="text-center d-flex flex-column align-items-center">
+                  <img src="../public/images/projex-high-resolution-logo.png" style="width: 185px;" alt="logo">
+                  <h4 class="mt-1 mb-5 pb-1">We are The Projex Team</h4>
                 </div>
+
+                <form id="loginForm">
+                  <p>Please login to your account</p>
+
+                  <div data-mdb-input-init class="form-outline mb-4">
+                    <label class="form-label" for="form2Example11">Username</label>
+                    <input type="email" id="form2Example11" class="form-control" placeholder="Email address" />
+                  </div>
+
+                  <div data-mdb-input-init class="form-outline mb-4">
+                    <label class="form-label" for="form2Example22">Password</label>
+                    <input type="password" id="form2Example22" class="form-control" placeholder="Enter Password" />
+                  </div>
+
+                  <div class="text-center pt-1 mb-5 pb-1">
+                    <button class="btn btn-outline-success btn-block fa-lg  mb-3" type="submit">Log
+                      in
+                    </button>
+                    <a class="text-muted" href="#!">Forgot password?</a>
+                  </div>
+
+                  <div class="d-flex align-items-center justify-content-center pb-4">
+                    <p class="mb-0 mr-4 me-2">Don't have an account?</p>
+                    <button type="button" data-mdb-button-init data-mdb-ripple-init
+                      class="btn btn-outline-danger">Create new
+                    </button>
+                  </div>
+
+                </form>
+
+              </div>
             </div>
+            <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+              <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                <h2 class="mb-3">Projex</h2>
+                <p class="small mb-0">A project sharing sharing platform that is made specifically
+                  for Stevens Community</p>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <script>
-    $(document).ready(function () {
+  $(document).ready(function () {
     // submit event listener
     $('#loginForm').submit(function (event) {
-        event.preventDefault();
-        
-        // Call the login function
-        login();
-    });
-});
+      event.preventDefault();
 
-function login() {
+      // Call the login function
+      login();
+    });
+  });
+
+  function login() {
     const email = $('#form2Example11').val();
     const password = $('#form2Example22').val();
-    console.log(email)
-    
-    const requestBody = JSON.stringify({email, password});
+    console.log(email);
+
+    const requestBody = JSON.stringify({ email, password });
 
     // POST request
     $.ajax({
-        url: 'http://localhost:3000/auth/login',
-        type: 'POST',
-        contentType: 'application/json',
-        data: requestBody,
-        error: function (xhr, status, error) {
-            // Handle errors
-            console.error('There was a problem with the login:', error);
-            // Display an error message to the user or handle the error in some other way
-        }
+      url: 'http://localhost:3000/auth/login',
+      type: 'POST',
+      contentType: 'application/json',
+      data: requestBody,
+      error: function (xhr, status, error) {
+        // Handle errors
+        console.error('There was a problem with the login:', error);
+        // Display an error message to the user or handle the error in some other way
+      }
     });
-}
+  }
 
 </script> --}}

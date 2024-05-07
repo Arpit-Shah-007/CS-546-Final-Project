@@ -1,132 +1,152 @@
-
-    <div class="container-fluid px-0">
-        <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
-            <a class="navbar-brand text-primary" href="/">PROJEX</a>
-            <form class="form-inline" id="search_form" action="/project/search" method="GET">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="searchParam">
-                <button class="btn btn-outline-primary " type="submit">Search</button>
-            </form>
-            <div>
-                {{#if isAdmin}}
-                <button type="button" class="btn btn-danger mr-10" 
-                    title="Add Project" onclick="navigate('/reportList')">
-                    Reports
-                </button>
-                {{/if}}
-                <button type="button" class="btn btn-outline-primary mr-10" 
-                    title="Add Project" onclick="navigate('/project/create')">
-                    Create Project
-                </button>
-                <div class="btn-group mr-10">
-                    <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <div class="dropdown-menu dropdown-menu-left">
-                        <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')">Profile</a>
-                        <a class="dropdown-item" onclick="logOut()">Log Out</a>
-                    </div>
+<div class="container-fluid px-0">
+    <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
+        <a class="navbar-brand text-primary" href="/">PROJEX</a>
+        <form class="form-inline" id="search_form" action="/project/search" method="GET">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search"
+                name="searchParam">
+            <button class="btn btn-outline-primary " type="submit">Search</button>
+        </form>
+        <div>
+            {{#if isAdmin}}
+            <button type="button" class="btn btn-danger mr-10" title="Add Project" onclick="navigate('/reportList')">
+                Reports
+            </button>
+            {{/if}}
+            <button type="button" class="btn btn-outline-primary mr-10" title="Add Project"
+                onclick="navigate('/project/create')">
+                Create Project
+            </button>
+            <div class="btn-group mr-10" style="cursor: pointer;">
+                <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar"
+                    id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="dropdown-menu dropdown-menu-right" style="left: auto; right: 0;">
+                    <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')"
+                        style="cursor: pointer;">Profile</a>
+                    <a class="dropdown-item" onclick="logOut()" style="cursor: pointer;">Log Out</a>
                 </div>
             </div>
-        </nav>
-    </div>
+        </div>
+    </nav>
+</div>
 
-    <div class="container mt-5">
-        <div class="overflow-x-auto">
-            <table class="table">
-                <!-- head -->
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Reason</th>
-                        <th>For Project</th>
-                        <th>Delete Project</th>
-                        <th>Delete Report</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="reportTableBody">
-                    <!-- row 1 -->
-                    {{#each reports}}
-                    <tr>
-                        <td>
-                            <div class="flex items-center gap-2">
-                                <div class="avatar">
-                                    <div class="mask mask-squircle w-12 h-12">
-                                        <img src="{{this.reportedBy.profilePic}}" alt="Avatar Tailwind CSS Component" />
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="font-bold">{{this.reportedBy.firstName}} {{this.reportedBy.lastName}}</div>
+<div class="container mt-5">
+    <div class="overflow-x-auto">
+        <table class="table">
+            <!-- head -->
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Reason</th>
+                    <th>For Project</th>
+                    <th>Delete Project</th>
+                    <th>Delete Report</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="reportTableBody">
+                <!-- row 1 -->
+                {{#each reports}}
+                <tr>
+                    <td>
+                        <div class="flex items-center gap-2">
+                            <div class="avatar">
+                                <div class="mask mask-squircle w-12 h-12">
+                                    <img src="{{this.reportedBy.profilePic}}" alt="Avatar Tailwind CSS Component" />
                                 </div>
                             </div>
-                        </td>
-                        <td>
-                            <div class="font-bold">{{this.reasonSelections}}</div>
-                        </td>
-                        <td>
-                            Report for project <a class="underline" href="/project/{{this.projectId}}">Click</a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <button class="btn btn-ghost btn-xs" id="projectDeleteButton" data-project-id="{{this.projectId}}">
-                                <?xml version="1.0" ?><svg id="projectDeleteIcon" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs>
-                                    <style>.cls-1{fill:#232323;}</style></defs><path class="cls-1" d="M22,4H16V3a3,3,0,0,0-3-3H11A3,3,0,0,0,
+                            <div>
+                                <div class="font-bold">{{this.reportedBy.firstName}} {{this.reportedBy.lastName}}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="font-bold">{{this.reasonSelections}}</div>
+                    </td>
+                    <td>
+                        Report for project <a class="underline" href="/project/{{this.projectId}}">Click</a>
+                    </td>
+                    <td>
+                        <a href="#">
+                            <button class="btn btn-ghost" id="projectDeleteButton" data-project-id="{{this.projectId}}">
+                                <?xml version="1.0" ?>
+                                <svg id="projectDeleteIcon" width="30" height="30" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <style>
+                                            .cls-1 {
+                                                fill: #232323;
+                                            }
+                                        </style>
+                                    </defs>
+                                    <path class="cls-1" d="M22,4H16V3a3,3,0,0,0-3-3H11A3,3,0,0,0,
                                     8,3V4H2A1,1,0,0,0,2,6H4V20a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2a1,1,0,0,0,0-2ZM10,3a1,1,0,0,1,1-1h2a1,1,0,0,1,1,
                                     1V4H10ZM9,18a1,1,0,0,1-2,0V10a1,1,0,0,1,2,0Zm4,0a1,1,0,0,1-2,0V10a1,1,0,0,1,2,0Zm4,0a1,1,0,0,1-2,0V10a1,1,0,0,1,2
-                                    ,0Z"/></svg>
+                                    ,0Z" />
+                                </svg>
                             </button>
-                            </a>
-                        </td>
-                        <th>
-                            <a href="#"></a>
-                            <button class="btn btn-ghost btn-xs" id="reportDeleteButton" data-report-id="{{this._id}}">
-                                <?xml version="1.0" ?><svg id="reportDeleteIcon" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs>
-                                    <style>.cls-1{fill:#232323;}</style></defs><path class="cls-1" d="M22,4H16V3a3,3,0,0,0-3-3H11A3,3,0,0,0,
+                        </a>
+                    </td>
+                    <th>
+                        <a href="#">
+                            <button class="btn btn-ghost" id="reportDeleteButton" data-report-id="{{this._id}}">
+                                <?xml version="1.0" ?><svg id="reportDeleteIcon" width="30" height="30"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <style>
+                                            .cls-1 {
+                                                fill: #232323;
+                                            }
+                                        </style>
+                                    </defs>
+                                    <path class="cls-1" d="M22,4H16V3a3,3,0,0,0-3-3H11A3,3,0,0,0,
                                     8,3V4H2A1,1,0,0,0,2,6H4V20a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2a1,1,0,0,0,0-2ZM10,3a1,1,0,0,1,1-1h2a1,1,0,0,1,1,
                                     1V4H10ZM9,18a1,1,0,0,1-2,0V10a1,1,0,0,1,2,0Zm4,0a1,1,0,0,1-2,0V10a1,1,0,0,1,2,0Zm4,0a1,1,0,0,1-2,0V10a1,1,0,0,1,2
-                                    ,0Z"/></svg>
+                                    ,0Z" />
+                                </svg>
                             </button>
-                        </th>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
+                        </a>
+                    </th>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
+</div>
 
-    <script>
-        function navigate(route) {
-                window.location.href = route;
-            }
+<script>
+    function navigate(route) {
+        window.location.href = route;
+    }
 
-        function logOut() {
-            // Implement logout logic
-        }
+    function logOut() {
+        // Implement logout logic
+    }
 
-        // Add event listener to report delete button
-        document.querySelectorAll('#reportDeleteButton').forEach(button => {
-            button.addEventListener('click', function() {
-                const reportId = this.getAttribute('data-report-id');
-                deleteReport(reportId);
-            });
+    // Add event listener to report delete button
+    document.querySelectorAll('#reportDeleteButton').forEach(button => {
+        button.addEventListener('click', function () {
+            const reportId = this.getAttribute('data-report-id');
+            deleteReport(reportId);
         });
+    });
 
-        document.querySelectorAll('#projectDeleteButton').forEach(button => {
-            button.addEventListener('click', function() {
-                const projectId = this.getAttribute('data-project-id');
-                deleteProject(projectId);
-            });
+    document.querySelectorAll('#projectDeleteButton').forEach(button => {
+        button.addEventListener('click', function () {
+            const projectId = this.getAttribute('data-project-id');
+            deleteProject(projectId);
         });
+    });
 
-        function deleteProject(projectId) {
-            // Send delete request for the project
-            fetch(`http://localhost:3000/project/${projectId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                    // Add any other headers if needed
-                },
-                // Add any body data if needed
-            })
+    function deleteProject(projectId) {
+        // Send delete request for the project
+        fetch(`http://localhost:3000/project/${projectId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+                // Add any other headers if needed
+            },
+            // Add any body data if needed
+        })
             .then(response => {
                 if (response.ok) {
                     // Show success alert
@@ -142,18 +162,18 @@
                 // Show error alert
                 alert('Error:', error);
             });
-        }
+    }
 
-        function deleteReport(reportId) {
-            // Send delete request for the report
-            fetch(`http://localhost:3000/report/${reportId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                    // Add any other headers if needed
-                },
-                // Add any body data if needed
-            })
+    function deleteReport(reportId) {
+        // Send delete request for the report
+        fetch(`http://localhost:3000/report/${reportId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+                // Add any other headers if needed
+            },
+            // Add any body data if needed
+        })
             .then(response => {
                 if (response.ok) {
                     // Show success alert
@@ -169,8 +189,9 @@
                 // Show error alert
                 alert('Error:', error);
             });
-}
+    }
 
-    </script>
+</script>
 </body>
+
 </html>

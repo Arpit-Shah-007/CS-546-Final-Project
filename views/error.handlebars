@@ -1,36 +1,6 @@
-<div class="container-fluid px-0">
-   <nav class="navbar navbar-dark bg-dark justify-content-between py-3">
-    <a class="navbar-brand text-primary cursor-pointer" id=""
-        onclick="navigate('/')">PROJEX</a>
-    <form class="form-inline" id="search_form">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search">
-        <button class="btn btn-outline-primary " type="submit">Search</button>
-
-    </form>
-    <div>
-        {{#if isAdmin}}
-        <button type="button" class="btn btn-danger mr-10" 
-            title="Add Project" onclick="navigate('/reportList')">
-            Reports
-        </button>
-        {{/if}}
-        <button type="button" class="btn btn-outline-primary mr-10" 
-            title="Add Project" onclick="navigate('/create')">
-            Create Project
-        </button>
-        
-
-        <div class="btn-group mr-10     " id="cursor-pointer">
-            <img class="avatar dropdown-toggle" src="https://avatar.iran.liara.run/public" alt="Avatar" id="dropdownMenu2"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <div class="dropdown-menu dropdown-menu-left">
-                <a class="dropdown-item" onclick="navigate('/user/{{user.id}}')">Profile</a>
-                <a class="dropdown-item" onclick="logOut()">Log Out</a>
-            </div>
-        </div>
-    </div>
-
-</nav>
-</div>
 
 
+<main class="container mt-5">
+  <h1>Error {{status}}</h1>
+  <p class="error">{{{message}}}</p>
+</main>
