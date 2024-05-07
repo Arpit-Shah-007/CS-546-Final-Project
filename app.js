@@ -2,8 +2,6 @@ import express from "express"
 import connectToDB from "./db/connectToMongoDB.js";
 import cors from 'cors';
 import mainRouter from "./routes/index.js";
-import path from 'path';
-import hbs from 'hbs'
 import exphbs from "express-handlebars";
 const app = express();
 
@@ -18,7 +16,6 @@ app.use(express.static('./public'))
 app.engine('handlebars', exphbs.engine({ defaultLayout: 'main', layoutsDir: './views/layouts' }));
 app.set('view engine', 'handlebars');
 
-hbs.registerPartials('./views/partials')
 
 app.use("/api/v1/", mainRouter);
 
